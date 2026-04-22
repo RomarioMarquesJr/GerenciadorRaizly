@@ -839,21 +839,45 @@
   async function captureSlide(post, idx) {
     var slide = post.slides[idx], total = post.slides.length;
     var c = document.createElement('div');
-    c.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1080px;height:1350px;overflow:hidden;font-family:\'Familjen Grotesk\',sans-serif;font-size:18px;';
+    c.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1080px;height:1350px;overflow:hidden;font-family:\'Familjen Grotesk\',sans-serif;';
     c.innerHTML = renderSlide(slide, total, post.id, idx);
+
     var el = c.querySelector('.slide-canvas');
-    el.style.width='1080px'; el.style.height='1350px';
+    el.style.width = '1080px';
+    el.style.height = '1350px';
+
     var q = function(sel, fn){ el.querySelectorAll(sel).forEach(fn); };
-    q('.sl-headline', function(e){ e.style.fontSize='34px'; e.style.lineHeight='1.2'; });
-    q('.sl-sub', function(e){ e.style.fontSize='20px'; });
-    q('.sl-body-text', function(e){ e.style.fontSize='20px'; });
-    q('.sl-num,.sl-tag', function(e){ e.style.fontSize='16px'; });
-    q('.sl-logo-wm', function(e){ e.style.fontSize='18px'; });
-    q('.sl-feat', function(e){ e.style.fontSize='19px'; });
-    q('.sl-cta-url', function(e){ e.style.fontSize='18px'; });
-    q('.sl-icon', function(e){ e.style.fontSize='64px'; });
-    q('.sl-dot', function(e){ e.style.width='8px'; e.style.height='8px'; });
-    q('.sl-feat-dot', function(e){ e.style.width='10px'; e.style.height='10px'; e.style.marginTop='5px'; });
+
+    // Zonas — padding proporcional a 1080px
+    var header = el.querySelector('.sl-header');
+    if (header) header.style.padding = '0 80px';
+
+    var body = el.querySelector('.sl-body');
+    if (body) { body.style.padding = '56px 80px'; body.style.gap = '30px'; }
+
+    var footer = el.querySelector('.sl-footer');
+    if (footer) footer.style.padding = '0 80px';
+
+    // Tipografia — escala Instagram 1080px
+    // Regra: max-clamp-value × 3 ≈ proporção correta para 1080px
+    q('.sl-headline', function(e){ e.style.fontSize='76px'; e.style.lineHeight='1.15'; });
+    q('.sl-sub',      function(e){ e.style.fontSize='42px'; e.style.lineHeight='1.45'; });
+    q('.sl-body-text',function(e){ e.style.fontSize='42px'; e.style.lineHeight='1.45'; });
+    q('.sl-num',      function(e){ e.style.fontSize='30px'; });
+    q('.sl-tag',      function(e){ e.style.fontSize='28px'; });
+    q('.sl-logo-wm',  function(e){ e.style.fontSize='38px'; });
+    q('.sl-features', function(e){ e.style.gap='20px'; });
+    q('.sl-feat',     function(e){ e.style.fontSize='38px'; e.style.lineHeight='1.4'; e.style.gap='20px'; e.style.alignItems='flex-start'; });
+    q('.sl-cta-url',  function(e){ e.style.fontSize='34px'; e.style.padding='20px 48px'; e.style.borderRadius='14px'; });
+    q('.sl-icon',     function(e){ e.style.fontSize='180px'; e.style.lineHeight='1'; });
+    q('.sl-dots',     function(e){ e.style.gap='12px'; });
+    q('.sl-dot',      function(e){ e.style.width='18px'; e.style.height='18px'; });
+    q('.sl-feat-dot', function(e){ e.style.width='14px'; e.style.height='14px'; e.style.flexShrink='0'; e.style.marginTop='13px'; });
+    q('.sl-logo',     function(e){ e.style.gap='14px'; e.style.alignItems='center'; });
+    el.querySelectorAll('.sl-logo svg').forEach(function(e){
+      e.setAttribute('width','52'); e.setAttribute('height','52');
+    });
+
     document.body.appendChild(c);
     try {
       var r = await html2canvas(c, { width:1080, height:1350, scale:1, useCORS:true, allowTaint:true, backgroundColor:null, logging:false });
