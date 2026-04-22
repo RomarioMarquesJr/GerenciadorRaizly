@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raizly Instagram Posts - Visual Preview</title>
+    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rust: #E8430A;
+            --bone: #F0EDE6;
+            --ink: #111111;
+            --mid: #888888;
+            --dim: #333333;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--bone);
+            font-family: 'Familjen Grotesk', sans-serif;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 48px;
+            color: var(--rust);
+            font-weight: 800;
+        }
+
+        .subtitle {
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--mid);
+            font-size: 18px;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+
+        .post {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+        }
+
+        .post:hover {
+            transform: translateY(-5px);
+        }
+
+        .post-inner {
+            aspect-ratio: 1080/1350;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            padding: 40px 30px;
+            position: relative;
+            overflow: hidden;
+            font-size: clamp(12px, 2vw, 18px);
+            line-height: 1.4;
+        }
+
+        /* Monday - Problem */
+        .post-monday-1 {
+            background: linear-gradient(135deg, var(--rust) 0%, #d63a07 100%);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-monday-1 h2 {
+            font-size: clamp(36px, 8vw, 56px);
+            font-weight: 800;
+            margin-bottom: 20px;
+            line-height: 1.1;
+        }
+
+        .post-monday-1 p {
+            font-size: clamp(14px, 3vw, 20px);
+            margin-bottom: 30px;
+        }
+
+        .post-label {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--dim);
+            opacity: 0.6;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .post-logo {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            color: rgba(255,255,255,0.4);
+        }
+
+        /* Tuesday - Data with image */
+        .post-tuesday-1 {
+            background: linear-gradient(to bottom, var(--ink) 0%, var(--dim) 100%);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            padding: 0;
+        }
+
+        .post-tuesday-1 .image-area {
+            width: 100%;
+            height: 65%;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--mid);
+            font-size: 14px;
+            border-bottom: 3px solid var(--rust);
+        }
+
+        .post-tuesday-1 .content {
+            padding: 25px;
+        }
+
+        .post-tuesday-1 h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .post-tuesday-1 p {
+            font-size: 13px;
+            color: var(--bone);
+            line-height: 1.4;
+        }
+
+        /* Wednesday - Transformation */
+        .post-wednesday-1 {
+            background: linear-gradient(to right, var(--ink) 0%, var(--dim) 50%, var(--bone) 100%);
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .post-wednesday-1 .before {
+            color: var(--bone);
+            margin-bottom: 20px;
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        .post-wednesday-1 .before-items {
+            color: var(--bone);
+            font-size: 14px;
+            margin-bottom: 20px;
+            text-align: left;
+            background: rgba(17,17,17,0.5);
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .post-wednesday-1 .arrow {
+            font-size: 28px;
+            margin: 15px 0;
+            color: var(--rust);
+        }
+
+        .post-wednesday-1 .after {
+            color: var(--ink);
+            font-size: 32px;
+            font-weight: 800;
+        }
+
+        /* Thursday - Urgency */
+        .post-thursday-1 {
+            background: linear-gradient(to bottom, var(--ink) 0%, #1a1a1a 100%);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-thursday-1 .stat {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--rust);
+            font-size: clamp(48px, 12vw, 80px);
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .post-thursday-1 h3 {
+            font-size: 16px;
+            color: var(--bone);
+            margin: 15px 0;
+        }
+
+        .post-thursday-1 .impact {
+            font-size: 14px;
+            color: var(--mid);
+            line-height: 1.5;
+        }
+
+        /* Friday - Control */
+        .post-friday-1 {
+            background: var(--rust);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-friday-1 h2 {
+            font-size: clamp(36px, 8vw, 52px);
+            font-weight: 800;
+            margin-bottom: 25px;
+            line-height: 1.1;
+        }
+
+        .post-friday-1 p {
+            font-size: 18px;
+        }
+
+        /* Social Proof */
+        .post-socialproof {
+            background: var(--bone);
+            color: var(--ink);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-socialproof .quote {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--rust);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .post-socialproof .author {
+            font-size: 14px;
+            color: var(--mid);
+            margin-top: 15px;
+        }
+
+        /* ROI */
+        .post-roi {
+            background: linear-gradient(135deg, var(--ink) 0%, #1a1a1a 100%);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-roi .question {
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .post-roi .number {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--rust);
+            font-size: clamp(40px, 10vw, 72px);
+            font-weight: 700;
+        }
+
+        .post-roi .label {
+            font-size: 14px;
+            color: var(--mid);
+            margin-top: 10px;
+        }
+
+        /* Info Box */
+        .info-box {
+            background: rgba(232, 67, 10, 0.1);
+            border-left: 4px solid var(--rust);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 6px;
+        }
+
+        .info-box h3 {
+            color: var(--rust);
+            margin-bottom: 10px;
+        }
+
+        .info-box p {
+            color: var(--bone);
+            line-height: 1.6;
+        }
+
+        .post-title {
+            text-align: center;
+            margin-top: 15px;
+            font-size: 14px;
+            color: var(--mid);
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .preview-section {
+            margin-bottom: 60px;
+        }
+
+        .preview-section h2 {
+            font-size: 28px;
+            color: var(--rust);
+            margin-bottom: 20px;
+            border-bottom: 2px solid var(--rust);
+            padding-bottom: 10px;
+        }
+
+        .note {
+            background: var(--dim);
+            padding: 15px;
+            border-radius: 6px;
+            margin: 20px 0;
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--bone);
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: var(--rust);
+            color: var(--bone);
+            padding: 12px 24px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            font-size: 14px;
+            transition: opacity 0.3s;
+        }
+
+        .cta-button:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--dim);
+            color: var(--mid);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Raizly Instagram</h1>
+        <p class="subtitle">Sistema de Posts de Vendas - Preview Visual</p>
+
+        <div class="info-box">
+            <h3>ℹ️ Como usar este preview:</h3>
+            <p>Veja abaixo exemplos visuais de 6 dos 10 posts. As cores, fontes e layout são baseados no design spec do Raizly. Use como referência para criar os posts em Canva ou Figma.</p>
+        </div>
+
+        <!-- WEEK 1 -->
+        <div class="preview-section">
+            <h2>📅 SEMANA 1</h2>
+
+            <div class="posts-grid">
+                <!-- Monday -->
+                <div class="post">
+                    <div class="post-inner post-monday-1">
+                        <div class="post-label">Seg • Agendamento</div>
+                        <h2>Você está cometendo esse erro que custa até R$10k/mês?</h2>
+                        <p>A maioria dos donos de barbearia não percebem...</p>
+                        <div class="post-logo">HEADLY TECH</div>
+                    </div>
+                    <div class="post-title">Slide 1 - Hook (Curiosity Gap)</div>
+                </div>
+
+                <!-- Tuesday -->
+                <div class="post">
+                    <div class="post-inner post-tuesday-1">
+                        <div class="image-area">🖼️ Imagem: Barbeiro + Dashboard</div>
+                        <div class="content">
+                            <h2>"Eu não sabia aonde meu dinheiro estava indo."</h2>
+                            <p>Em uma semana, João tinha visibilidade total dos números...</p>
+                        </div>
+                    </div>
+                    <div class="post-title">Terça - Feed Long (com imagem heroica)</div>
+                </div>
+
+                <!-- Wednesday -->
+                <div class="post">
+                    <div class="post-inner post-wednesday-1">
+                        <div class="before">ANTES ❌</div>
+                        <div class="before-items">
+                            • Agenda no WhatsApp<br>
+                            • Cliente não confirma<br>
+                            • Horário vazio
+                        </div>
+                        <div class="arrow">→</div>
+                        <div class="after">DEPOIS ✅</div>
+                    </div>
+                    <div class="post-title">Quarta - Transformação</div>
+                </div>
+
+                <!-- Thursday -->
+                <div class="post">
+                    <div class="post-inner post-thursday-1">
+                        <div class="stat">R$12.000</div>
+                        <h3>Perdidos por mês</h3>
+                        <div class="impact">
+                            40% de clientes não confirmam agendamento<br>
+                            <br>
+                            Isso é quanto você está deixando de ganhar
+                        </div>
+                    </div>
+                    <div class="post-title">Quinta - Urgência (números)</div>
+                </div>
+
+                <!-- Friday -->
+                <div class="post">
+                    <div class="post-inner post-friday-1">
+                        <div class="post-label">Sex • Controle</div>
+                        <h2>Você sabe quanto LUCROU na semana passada?</h2>
+                        <p>(Com certeza? Ou é palpite?)</p>
+                        <div class="post-logo">HEADLY TECH</div>
+                    </div>
+                    <div class="post-title">Sexta - Teaser (Controle)</div>
+                </div>
+            </div>
+
+            <div class="note">
+                💡 <strong>Notem:</strong> Cada post segue o framework AIDA (Hook → Agitation → Solution → CTA). Cores são Rust #E8430A para destaque, Bone #F0EDE6 para texto claro, Ink #111111 para fundos escuros.
+            </div>
+        </div>
+
+        <!-- WEEK 2 PREVIEW -->
+        <div class="preview-section">
+            <h2>📅 SEMANA 2</h2>
+
+            <div class="posts-grid">
+                <!-- Monday Deep Dive -->
+                <div class="post">
+                    <div class="post-inner post-tuesday-1">
+                        <div class="image-area">🖼️ Imagem: Dono com planilha</div>
+                        <div class="content">
+                            <h2>"Meu fluxo de caixa era um mistério."</h2>
+                            <p>Carlos descobriu que estava gastando 35% com produtos desnecessários...</p>
+                        </div>
+                    </div>
+                    <div class="post-title">Segunda - Deep Dive (Controle)</div>
+                </div>
+
+                <!-- Tuesday Social Proof -->
+                <div class="post">
+                    <div class="post-inner post-socialproof">
+                        <div class="quote">"Raizly mudou minha barbearia"</div>
+                        <div style="font-size: 14px; line-height: 1.5;">
+                            📈 Faturamento +30%<br>
+                            ⏰ Estresse reduzido<br>
+                            😊 95% confirmação
+                        </div>
+                        <div class="author">- Bruno, Barbearia Elite SP</div>
+                    </div>
+                    <div class="post-title">Terça - Social Proof (Case real)</div>
+                </div>
+
+                <!-- Friday ROI -->
+                <div class="post">
+                    <div class="post-inner post-roi">
+                        <div class="question">Vale a pena?</div>
+                        <div class="number">1.600%</div>
+                        <div class="label">Retorno ao mês</div>
+                        <div style="font-size: 14px; margin-top: 20px; color: var(--bone);">
+                            R$8.000 ganho<br>
+                            R$500 custo<br>
+                            = Lucro puro
+                        </div>
+                    </div>
+                    <div class="post-title">Sexta - ROI (Matemática)</div>
+                </div>
+            </div>
+
+            <div class="note">
+                ✨ <strong>Variação:</strong> Semana 2 inclui Social Proof real (depoimentos), Deep Dive em casos, e ROI/números finais. Mantém mesma paleta visual, mas com ângulos diferentes para não ficar repetitivo.
+            </div>
+        </div>
+
+        <!-- STYLE GUIDE -->
+        <div class="preview-section">
+            <h2>🎨 Guia de Estilo Aplicado</h2>
+
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin: 20px 0;">
+                <div style="padding: 20px; background: var(--rust); border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 10px;">RUST</div>
+                    <div style="font-family: 'JetBrains Mono', monospace; color: var(--bone);">#E8430A</div>
+                    <div style="font-size: 12px; color: var(--bone); margin-top: 10px;">Para CTAs, números,<br>destaque e urgência</div>
+                </div>
+                <div style="padding: 20px; background: var(--bone); color: var(--ink); border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 10px;">BONE</div>
+                    <div style="font-family: 'JetBrains Mono', monospace; color: var(--ink);">#F0EDE6</div>
+                    <div style="font-size: 12px; color: var(--ink); margin-top: 10px;">Para texto em fundos<br>escuros, backgrounds</div>
+                </div>
+                <div style="padding: 20px; background: var(--ink); border: 2px solid var(--rust); border-radius: 8px; text-align: center;">
+                    <div style="font-size: 24px; font-weight: 700; margin-bottom: 10px;">INK</div>
+                    <div style="font-family: 'JetBrains Mono', monospace;">#111111</div>
+                    <div style="font-size: 12px; margin-top: 10px;">Para fundos principais,<br>texto em Bone</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 30px; padding: 20px; background: var(--dim); border-radius: 8px;">
+                <h3 style="color: var(--rust); margin-bottom: 15px;">Tipografia</h3>
+                <div style="margin-bottom: 15px;">
+                    <div style="font-family: 'Familjen Grotesk', sans-serif; font-size: 28px; font-weight: 800; color: var(--bone); margin-bottom: 5px;">Familjen Grotesk</div>
+                    <div style="font-size: 13px; color: var(--mid);">Headlines, corpos de texto, copy principal</div>
+                </div>
+                <div>
+                    <div style="font-family: 'JetBrains Mono', monospace; font-size: 18px; color: var(--rust); margin-bottom: 5px;">JetBrains Mono</div>
+                    <div style="font-size: 13px; color: var(--mid);">Números, dados, pequenos detalhes técnicos</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NEXT STEPS -->
+        <div class="preview-section">
+            <h2>🚀 Próximos Passos</h2>
+
+            <div style="background: var(--dim); padding: 30px; border-radius: 8px; line-height: 1.8;">
+                <h3 style="color: var(--rust); margin-bottom: 15px;">1️⃣ Procura de Assets (1-2h)</h3>
+                <p>Baixe fotos em Unsplash/Pexels, ícones em Lucide, e screenshots do Raizly (ou crie mockup).</p>
+
+                <h3 style="color: var(--rust); margin-bottom: 15px; margin-top: 20px;">2️⃣ Design em Canva (4-6h)</h3>
+                <p>Use estes mockups como referência. Crie 1-2 posts, depois replique o padrão para os outros.</p>
+
+                <h3 style="color: var(--rust); margin-bottom: 15px; margin-top: 20px;">3️⃣ Setup de Publicação (30min)</h3>
+                <p>Configure links UTM (já prontos no plano) e agende no Instagram Manager para começar segunda.</p>
+
+                <h3 style="color: var(--rust); margin-bottom: 15px; margin-top: 20px;">4️⃣ Publicação & Tracking (15min/dia)</h3>
+                <p>Publica 1 post/dia (seg-sex), monitora métricas, ajusta próximas semanas conforme performance.</p>
+            </div>
+
+            <a href="#" class="cta-button">📥 Baixar Mockups em Alta Resolução</a>
+        </div>
+
+        <footer>
+            <p>Raizly Instagram Content System | Design System & Copy Framework</p>
+            <p style="margin-top: 10px; color: var(--dim);">Criado em 2026-03-24 | HEADLY TECH</p>
+        </footer>
+    </div>
+</body>
+</html>

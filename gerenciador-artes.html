@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Raizly — Gerenciador de Artes</title>
+  <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root { --rust:#E8430A; --bone:#F0EDE6; --ink:#111111; --mid:#888888; --dim:#333333; --card-bg:#1a1a1a; --green:#4ade80; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--ink); color: var(--bone); font-family: 'Familjen Grotesk', sans-serif; min-height: 100vh; }
+
+    .page-header { position: sticky; top: 0; z-index: 50; background: rgba(17,17,17,0.96); backdrop-filter: blur(12px); border-bottom: 1px solid var(--dim); padding: 18px 40px; display: flex; align-items: center; justify-content: space-between; }
+    .h-brand { display: flex; align-items: center; gap: 10px; }
+    .h-brand-wm { font-weight: 800; font-size: 20px; letter-spacing: -1px; }
+    .h-meta { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--mid); }
+
+    .hero { padding: 48px 40px 36px; text-align: center; border-bottom: 1px solid var(--dim); }
+    .hero h1 { font-size: clamp(26px,4vw,46px); font-weight: 800; margin-bottom: 10px; }
+    .hero h1 em { color: var(--rust); font-style: normal; }
+    .hero p { font-size: 15px; color: var(--mid); max-width: 500px; margin: 0 auto 24px; line-height: 1.6; }
+    .notice { display: inline-flex; align-items: flex-start; gap: 8px; background: rgba(232,67,10,0.1); border: 1px solid rgba(232,67,10,0.25); border-radius: 8px; padding: 10px 16px; font-size: 13px; color: var(--bone); line-height: 1.5; max-width: 560px; text-align: left; }
+
+    /* FILTER BAR */
+    .filter-bar { display: flex; gap: 0; padding: 0 40px; border-bottom: 1px solid var(--dim); background: rgba(17,17,17,0.5); }
+    .filter-btn { display: flex; align-items: center; gap: 7px; background: transparent; color: var(--mid); border: none; border-bottom: 2px solid transparent; font-family: 'Familjen Grotesk', sans-serif; font-size: 13px; font-weight: 600; cursor: pointer; padding: 14px 18px; transition: color .2s, border-color .2s; }
+    .filter-btn:hover { color: var(--bone); }
+    .filter-btn.active { color: var(--bone); border-bottom-color: var(--rust); }
+    .filter-count { background: rgba(255,255,255,0.08); border-radius: 100px; padding: 1px 8px; font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+    .filter-btn.active .filter-count { background: rgba(232,67,10,0.2); color: var(--rust); }
+    .filter-btn.f-posted.active .filter-count { background: rgba(74,222,128,0.15); color: var(--green); }
+    .filter-btn.f-posted.active { color: var(--green); border-bottom-color: var(--green); }
+
+    .week-section { padding: 36px 40px 52px; }
+    .week-header { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .week-badge { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; background: var(--rust); color: white; padding: 4px 12px; border-radius: 100px; text-transform: uppercase; letter-spacing: 1px; }
+    .week-title { font-size: 18px; font-weight: 700; }
+    .week-divider { border: none; border-top: 1px solid var(--dim); margin: 16px 0 24px; }
+    .week-empty { display: none; font-size: 13px; color: var(--mid); padding: 24px 0; font-family: 'JetBrains Mono', monospace; }
+
+    .arts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; }
+
+    .art-card { background: var(--card-bg); border-radius: 12px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s; }
+    .art-card:hover { transform: translateY(-3px); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+    .art-card.posted { border-color: rgba(74,222,128,0.3); }
+
+    .slide-thumb-wrap { width: 100%; aspect-ratio: 1080/1350; overflow: hidden; cursor: pointer; position: relative; }
+    .slide-thumb-wrap:hover .thumb-overlay { opacity: 1; }
+    .thumb-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.2s; font-size: 13px; font-weight: 700; color: white; }
+
+    .card-foot { padding: 12px 14px 14px; }
+    .card-meta { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .card-title { font-size: 13px; font-weight: 700; }
+    .card-tag { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--mid); background: rgba(255,255,255,0.06); padding: 2px 8px; border-radius: 100px; text-transform: uppercase; }
+    .card-desc { font-size: 11px; color: var(--mid); line-height: 1.5; margin-bottom: 12px; }
+
+    .dl-row { display: flex; gap: 6px; }
+    .btn-zip { flex: 1; background: var(--rust); color: white; border: none; border-radius: 8px; padding: 10px; font-family: 'Familjen Grotesk', sans-serif; font-size: 13px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
+    .btn-zip:hover { opacity: 0.88; }
+    .btn-zip.loading { opacity: 0.6; pointer-events: none; }
+    .btn-ind { background: #2a2a2a; color: var(--bone); border: none; border-radius: 8px; padding: 10px 12px; font-family: 'Familjen Grotesk', sans-serif; font-size: 12px; cursor: pointer; white-space: nowrap; transition: background .2s; }
+    .btn-ind:hover { background: #333; }
+
+    /* POSTED TRACKING */
+    .mark-row { display: flex; align-items: center; gap: 8px; margin-top: 10px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.05); }
+    .btn-mark { flex: 1; background: rgba(255,255,255,0.04); color: var(--mid); border: 1px solid rgba(255,255,255,0.08); border-radius: 8px; padding: 8px 10px; font-family: 'Familjen Grotesk', sans-serif; font-size: 12px; font-weight: 600; cursor: pointer; transition: all .2s; text-align: center; }
+    .btn-mark:hover { background: rgba(74,222,128,0.08); color: var(--green); border-color: rgba(74,222,128,0.2); }
+    .btn-mark.marked { background: rgba(74,222,128,0.1); color: var(--green); border-color: rgba(74,222,128,0.25); }
+    .posted-stamp { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--green); opacity: 0.8; white-space: nowrap; display: none; }
+
+    .page-footer { border-top: 1px solid var(--dim); text-align: center; padding: 28px 40px; }
+    .page-footer p { font-size: 12px; color: var(--mid); line-height: 1.7; }
+
+    #toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%) translateY(80px); background: #1e1e1e; border: 1px solid var(--rust); color: var(--bone); padding: 10px 20px; border-radius: 100px; font-size: 13px; font-weight: 600; transition: transform 0.25s; z-index: 999; white-space: nowrap; }
+    #toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* SLIDE TEMPLATE A */
+    .slide-canvas { width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; position: relative; font-family: 'Familjen Grotesk', sans-serif; }
+    .sl-header { height: 14%; flex-shrink: 0; background: rgba(0,0,0,0.22); display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(12px,4%,28px); }
+    .sl-num { font-family: 'JetBrains Mono', monospace; font-size: clamp(8px,1.6vw,13px); color: rgba(255,255,255,0.55); letter-spacing: .5px; }
+    .sl-tag { font-family: 'JetBrains Mono', monospace; font-size: clamp(7px,1.4vw,11px); color: rgba(255,255,255,0.4); text-transform: uppercase; letter-spacing: 1px; }
+    .sl-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: clamp(14px,4%,40px) clamp(14px,5%,44px); gap: clamp(8px,2%,16px); }
+    .sl-icon { font-size: clamp(28px,7vw,52px); line-height: 1; }
+    .sl-headline { font-weight: 800; font-size: clamp(12px,2.8vw,26px); line-height: 1.2; }
+    .sl-sub { font-size: clamp(9px,1.9vw,15px); line-height: 1.5; opacity: 0.75; }
+    .sl-body-text { font-size: clamp(10px,2.2vw,16px); line-height: 1.5; opacity: 0.85; }
+    .sl-features { display: flex; flex-direction: column; gap: clamp(5px,1.2%,9px); width: 100%; text-align: left; }
+    .sl-feat { display: flex; align-items: flex-start; gap: 8px; font-size: clamp(9px,1.9vw,13px); line-height: 1.4; }
+    .sl-feat-dot { width: clamp(5px,1vw,7px); height: clamp(5px,1vw,7px); border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .sl-cta-url { font-family: 'JetBrains Mono', monospace; font-size: clamp(9px,1.8vw,14px); background: rgba(0,0,0,0.25); padding: clamp(6px,1.5%,10px) clamp(12px,3%,20px); border-radius: 6px; color: rgba(255,255,255,0.9); }
+    .sl-footer { height: 13%; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between; padding: 0 clamp(12px,4%,28px); border-top: 1px solid rgba(255,255,255,0.08); }
+    .sl-logo { display: flex; align-items: center; gap: clamp(4px,1%,7px); }
+    .sl-logo-wm { font-weight: 800; letter-spacing: -.5px; font-size: clamp(9px,1.8vw,14px); }
+    .sl-dots { display: flex; gap: clamp(3px,.8vw,5px); }
+    .sl-dot { width: clamp(4px,.9vw,6px); height: clamp(4px,.9vw,6px); border-radius: 50%; background: rgba(255,255,255,0.2); }
+    .sl-dot.active { background: var(--rust); }
+
+    .bg-rust { background: linear-gradient(135deg,#E8430A 0%,#c43208 100%); color: var(--bone); }
+    .bg-ink  { background: linear-gradient(to bottom,#111111 0%,#1a1a1a 100%); color: var(--bone); }
+    .bg-bone { background: var(--bone); color: var(--ink); }
+    .bg-bone .sl-header { background: rgba(17,17,17,0.08); }
+    .bg-bone .sl-num, .bg-bone .sl-tag { color: rgba(17,17,17,0.4); }
+    .bg-bone .sl-footer { border-top: 1px solid rgba(17,17,17,0.08); }
+    .bg-bone .sl-logo-wm { color: rgba(17,17,17,0.4); }
+    .bg-bone .sl-dot { background: rgba(17,17,17,0.15); }
+    .bg-bone .sl-dot.active { background: var(--rust); }
+    .bg-bone .sl-feat-dot { background: var(--rust); }
+    .bg-bone .sl-body-text, .bg-bone .sl-sub { color: rgba(17,17,17,0.7); }
+    .bg-bone .sl-headline { color: var(--ink); }
+    .bg-rust .sl-feat-dot { background: rgba(255,255,255,0.8); }
+    .bg-ink  .sl-feat-dot { background: var(--rust); }
+
+    /* MODAL */
+    #modal { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.93); align-items: center; justify-content: center; gap: clamp(12px,3vw,32px); padding: 20px; }
+    #modal.open { display: flex; }
+    .modal-arrow { width: 48px; height: 48px; border-radius: 50%; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; color: white; cursor: pointer; flex-shrink: 0; transition: background 0.2s; user-select: none; }
+    .modal-arrow:hover { background: rgba(255,255,255,0.15); }
+    .modal-arrow.hidden { visibility: hidden; }
+    .modal-center { display: flex; flex-direction: column; align-items: center; gap: 16px; flex: 1; max-width: 480px; }
+    .modal-info { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--mid); text-align: center; }
+    .modal-slide-wrap { width: 100%; aspect-ratio: 1080/1350; max-height: 75vh; max-width: calc(75vh * 1080 / 1350); border-radius: 12px; overflow: hidden; box-shadow: 0 32px 100px rgba(0,0,0,0.9); }
+    .modal-dots { display: flex; gap: 8px; justify-content: center; }
+    .modal-dot { width: 7px; height: 7px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: background 0.2s; }
+    .modal-dot.active { background: var(--rust); }
+    .modal-actions { display: flex; gap: 8px; }
+    .modal-btn-zip { background: var(--rust); color: white; border: none; border-radius: 9px; padding: 12px 22px; font-family: 'Familjen Grotesk', sans-serif; font-size: 14px; font-weight: 700; cursor: pointer; transition: opacity .2s; }
+    .modal-btn-zip:hover { opacity: 0.88; }
+    .modal-btn-zip.loading { opacity: 0.6; pointer-events: none; }
+    .modal-btn-ind { background: #2a2a2a; color: var(--bone); border: none; border-radius: 9px; padding: 12px 16px; font-family: 'Familjen Grotesk', sans-serif; font-size: 13px; cursor: pointer; transition: background .2s; }
+    .modal-btn-ind:hover { background: #333; }
+    .ind-panel { display: none; flex-direction: column; gap: 6px; background: #1a1a1a; border-radius: 10px; padding: 12px; width: 100%; max-height: 200px; overflow-y: auto; }
+    .ind-panel.open { display: flex; }
+    .ind-row { display: flex; align-items: center; gap: 10px; font-size: 12px; color: var(--bone); }
+    .ind-thumb { width: 32px; height: 40px; border-radius: 4px; flex-shrink: 0; overflow: hidden; }
+    .ind-name { flex: 1; font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--mid); }
+    .ind-dl { background: var(--dim); color: var(--bone); border: none; border-radius: 5px; padding: 5px 10px; font-size: 11px; cursor: pointer; transition: background .2s; }
+    .ind-dl:hover { background: var(--rust); }
+    .modal-close { position: fixed; top: 16px; right: 20px; font-size: 24px; color: rgba(255,255,255,0.4); cursor: pointer; z-index: 201; line-height: 1; transition: color .2s; }
+    .modal-close:hover { color: white; }
+  </style>
+</head>
+<body>
+
+  <header class="page-header">
+    <div class="h-brand">
+      <svg width="28" height="28" viewBox="0 0 72 72" fill="none">
+        <rect width="72" height="72" rx="18" fill="#1a1a1a"/>
+        <g transform="rotate(-22,36,36)">
+          <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+          <circle cx="36" cy="22" r="6.5" fill="#111"/><circle cx="36" cy="22" r="3" fill="#E8430A"/>
+          <circle cx="37.5" cy="20.5" r="1.2" fill="white"/>
+          <circle cx="36" cy="40" r="6.5" fill="#111"/><circle cx="36" cy="40" r="3" fill="#E8430A"/>
+          <circle cx="37.5" cy="38.5" r="1.2" fill="white"/>
+          <polygon points="36,29 33,33 39,33" fill="#111"/>
+        </g>
+        <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+        <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+      </svg>
+      <span class="h-brand-wm">raizly</span>
+    </div>
+    <div class="h-meta">20 artes · 4 semanas · Instagram 1080×1350px</div>
+  </header>
+
+  <div class="hero">
+    <h1>Gerenciador de <em>Artes</em></h1>
+    <p>Clique para preview. Baixe em PNG 1080×1350px ou pacote ZIP. Marque o que já foi postado.</p>
+    <div class="notice">
+      <span>✓</span>
+      <span>Copy revisado com frameworks de copywriting e social content — direto, honesto e feito para converter.</span>
+    </div>
+  </div>
+
+  <div class="filter-bar">
+    <button class="filter-btn active" onclick="setFilter('all')" id="filter-all">Todas <span class="filter-count" id="count-all">20</span></button>
+    <button class="filter-btn" onclick="setFilter('pending')" id="filter-pending">Pendentes <span class="filter-count" id="count-pending">20</span></button>
+    <button class="filter-btn f-posted" onclick="setFilter('posted')" id="filter-posted">Postadas <span class="filter-count" id="count-posted">0</span></button>
+  </div>
+
+  <section class="week-section" id="section-s1">
+    <div class="week-header"><span class="week-badge">Semana 1</span><span class="week-title">Segunda → Sexta</span></div>
+    <hr class="week-divider">
+    <div class="arts-grid" id="grid-s1"></div>
+    <p class="week-empty" id="empty-s1">Nenhuma arte nessa semana com esse filtro.</p>
+  </section>
+
+  <section class="week-section" id="section-s2" style="padding-top:0">
+    <div class="week-header"><span class="week-badge">Semana 2</span><span class="week-title">Segunda → Sexta</span></div>
+    <hr class="week-divider">
+    <div class="arts-grid" id="grid-s2"></div>
+    <p class="week-empty" id="empty-s2">Nenhuma arte nessa semana com esse filtro.</p>
+  </section>
+
+  <section class="week-section" id="section-s3" style="padding-top:0">
+    <div class="week-header"><span class="week-badge">Semana 3</span><span class="week-title">Segunda → Sexta</span></div>
+    <hr class="week-divider">
+    <div class="arts-grid" id="grid-s3"></div>
+    <p class="week-empty" id="empty-s3">Nenhuma arte nessa semana com esse filtro.</p>
+  </section>
+
+  <section class="week-section" id="section-s4" style="padding-top:0">
+    <div class="week-header"><span class="week-badge">Semana 4</span><span class="week-title">Segunda → Sexta</span></div>
+    <hr class="week-divider">
+    <div class="arts-grid" id="grid-s4"></div>
+    <p class="week-empty" id="empty-s4">Nenhuma arte nessa semana com esse filtro.</p>
+  </section>
+
+  <footer class="page-footer">
+    <p><strong>raizly</strong> · raizly.tech · Sistema de gestão para barbearias<br>
+    Conteúdo baseado nas funcionalidades reais do produto</p>
+  </footer>
+
+  <div id="modal">
+    <span class="modal-close" onclick="closeModal()">✕</span>
+    <button class="modal-arrow" id="modal-prev" onclick="modalNav(-1)">‹</button>
+    <div class="modal-center">
+      <div class="modal-info" id="modal-info"></div>
+      <div class="modal-slide-wrap" id="modal-slide-wrap"></div>
+      <div class="modal-dots" id="modal-dots"></div>
+      <div class="modal-actions">
+        <button class="modal-btn-zip" id="modal-btn-zip">⬇ Baixar ZIP</button>
+        <button class="modal-btn-ind" onclick="toggleIndPanel()">slide a slide</button>
+      </div>
+      <div class="ind-panel" id="ind-panel"></div>
+    </div>
+    <button class="modal-arrow" id="modal-next" onclick="modalNav(1)">›</button>
+  </div>
+
+  <div id="toast"></div>
+
+  <script>
+  /* ═══════════════════════════════════════════
+     DATA — 20 posts × 4 slides
+     Copy reescrito: hooks que param o scroll,
+     features como situação específica,
+     benefícios no idioma do dono de barbearia.
+  ═══════════════════════════════════════════ */
+  var POSTS = [
+
+    // ── SEMANA 1 ─────────────────────────────
+    {
+      id:'s1-seg', week:1,
+      title:'Segunda — Agendamento',
+      desc:'Chega de WhatsApp. Seu cliente agenda sozinho, confirma sozinho.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'agendamento', icon:'📅',
+          headline:'Você ainda agenda por mensagem de WhatsApp?',
+          sub:'É difícil de controlar, fácil de perder e impossível de escalar.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Com o Raizly:',
+          features:['Link de agendamento com o nome da sua barbearia','Cliente escolhe horário e barbeiro preferido','Confirmação automática — sem você fazer nada','Histórico de cada cliente salvo no sistema'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você chega na segunda sabendo exatamente o que vai acontecer no dia.',
+          sub:'Sem surpresa. Sem mensagem perdida. Sem depender de ninguém para confirmar.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Experimente 14 dias grátis.',
+          sub:'Sem cartão de crédito. Sem compromisso.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s1-ter', week:1,
+      title:'Terça — Agenda Digital',
+      desc:'Sua agenda no sistema. Não no celular pessoal.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'agenda', icon:'📋',
+          headline:'Sua agenda de hoje está no WhatsApp, no papel ou na cabeça?',
+          sub:'Nenhum dos três é agenda. É improviso.' },
+        { bg:'rust', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Com o Raizly:',
+          features:['Agenda centralizada — separada do celular pessoal','Cada barbeiro com sua própria fila de atendimento','Cliente vê horários disponíveis em tempo real','Você enxerga o dia inteiro em uma tela'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você para de improvisar e começa a gerir.',
+          sub:'A diferença entre ter uma barbearia e ter um negócio.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Comece grátis hoje.',
+          sub:'14 dias sem cobrar nada.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s1-qua', week:1,
+      title:'Quarta — Dashboard',
+      desc:'Faturamento, ticket médio e agendamentos em tempo real.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'bone', type:'hook', num:'01', tag:'dashboard', icon:'📊',
+          headline:'Você sabe quanto sua barbearia faturou essa semana?',
+          sub:'Se precisou pensar, o problema já está respondido.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O que você vê em tempo real:',
+          features:['Faturamento do dia, semana e mês','Ticket médio por serviço e por barbeiro','Agendamentos confirmados vs. pendentes','Horário e dia de maior movimento'] },
+        { bg:'rust', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você toma decisão com dado, não com chute.',
+          sub:'Sabe o que promover, quando desconto vale, qual barbeiro precisa de mais agenda.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Veja seus dados agora.',
+          sub:'14 dias grátis, sem cartão.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s1-qui', week:1,
+      title:'Quinta — Financeiro',
+      desc:'Caixa, despesas, crediário e relatório automático.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'financeiro', icon:'💰',
+          headline:'Quanto entrou e saiu da sua barbearia esse mês?',
+          sub:'Se você não sabe agora, descobre na conta bancária no fim do mês. Tarde demais.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O Raizly registra tudo:',
+          features:['Cada pagamento: dinheiro, cartão, pix ou crediário','Despesas por categoria: produtos, aluguel, outros','Crediário: quem deve, quanto e quando combinou pagar','Relatório automático gerado no fim do mês'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Sem planilha. Sem caderninho. Sem surpresa.',
+          sub:'Você fecha o mês sabendo exatamente onde foi cada centavo.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Controle seu caixa grátis.',
+          sub:'14 dias de teste.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s1-sex', week:1,
+      title:'Sexta — Comunicação',
+      desc:'Lembrete automático e chat sem WhatsApp pessoal.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'comunicação', icon:'💬',
+          headline:'Seu cliente sumiu e você não sabe se vem ou não.',
+          sub:'Você para de atender para mandar mensagem. Não é assim que deveria ser.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Com o Raizly, o sistema faz isso por você:',
+          features:['Lembrete automático enviado antes do horário marcado','Confirmação de agendamento na hora que o cliente marca','Chat com o cliente dentro do sistema — não no WhatsApp pessoal','Histórico de toda conversa salvo por cliente'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você para de correr atrás de cliente para confirmar.',
+          sub:'O sistema faz. Você foca no atendimento.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Ative os lembretes grátis.',
+          sub:'14 dias de teste.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+
+    // ── SEMANA 2 ─────────────────────────────
+    {
+      id:'s2-seg', week:2,
+      title:'Segunda — Equipe',
+      desc:'Quanto cada barbeiro gerou? Agora você sabe.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'equipe', icon:'✂️',
+          headline:'Quanto cada barbeiro gerou esse mês?',
+          sub:'Se você não sabe de cabeça, você não tem gestão de equipe. Tem fé.' },
+        { bg:'rust', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Com o Raizly:',
+          features:['Cada barbeiro com agenda, serviços e horários próprios','Cliente escolhe o barbeiro preferido ao agendar','Faturamento individual de cada profissional','Controle de comissão direto no sistema'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você vê quem está cheio de agenda e quem precisa de atenção.',
+          sub:'Decisão com dado. Não com feeling.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Organize sua equipe agora.',
+          sub:'14 dias grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s2-ter', week:2,
+      title:'Terça — Relatórios',
+      desc:'Relatórios automáticos. Você só lê.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'bone', type:'hook', num:'01', tag:'relatórios', icon:'📈',
+          headline:'Você monta planilha toda semana para entender o que aconteceu?',
+          sub:'Você deveria estar crescendo, não montando tabela.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O sistema gera automaticamente:',
+          features:['Serviço mais agendado e mais rentável da semana','Horário e dia de maior movimento','Ticket médio por serviço e por período','Clientes novos vs. clientes que voltaram'] },
+        { bg:'rust', type:'benefit', num:'03', tag:'resultado',
+          headline:'Informação pronta toda semana. Sem trabalho.',
+          sub:'Você usa o tempo que sobrou para crescer.' },
+        { bg:'bone', type:'cta', num:'04', tag:'raizly',
+          headline:'Veja seus relatórios agora.',
+          sub:'14 dias de teste grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s2-qua', week:2,
+      title:'Quarta — Pagamentos',
+      desc:'Dinheiro, cartão, pix e crediário sem caderninho.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'pagamentos', icon:'💳',
+          headline:'Alguém deve para você e você já não lembra quanto?',
+          sub:'Se você tem caderninho de fiado, você já conhece o problema.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O Raizly registra cada centavo:',
+          features:['Dinheiro, cartão (débito e crédito), pix — cada forma separada','Crediário com nome, valor e data combinada de pagamento','Histórico completo de cada cliente pagante','Você sabe quem deve antes de ele chegar'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você cobra com segurança porque tem o registro.',
+          sub:'Sem constrangimento. Sem esquecer. Sem perder dinheiro por falta de controle.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Controle seu crediário grátis.',
+          sub:'14 dias de teste.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s2-qui', week:2,
+      title:'Quinta — Automação',
+      desc:'Sua barbearia funciona quando você não está lá?',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'automação', icon:'⚡',
+          headline:'Sua barbearia funciona quando você não está lá?',
+          sub:'Se tudo para quando você para, você tem um emprego, não um negócio.' },
+        { bg:'rust', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O fluxo que o Raizly automatiza:',
+          features:['① Cliente agenda pelo link da sua barbearia','② Recebe confirmação automática na hora','③ Lembrete enviado antes do horário marcado','④ Cliente aparece. Você atende. Sem esforço extra.'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você constrói uma operação que roda sem depender de cada detalhe seu.',
+          sub:'Menos no-show. Mais previsibilidade. Mais controle.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Automatize sua barbearia.',
+          sub:'14 dias grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s2-sex', week:2,
+      title:'Sexta — Raizly Completo',
+      desc:'Um sistema. Tudo que barbearia precisa.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'raizly', icon:'💈',
+          headline:'Barbearia organizada não é sorte. É sistema.',
+          sub:'A diferença não está no talento do barbeiro. Está na ferramenta que o dono usa.' },
+        { bg:'rust', type:'features', num:'02', tag:'funcionalidades',
+          headline:'Tudo que o Raizly integra:',
+          features:['Agendamento online + confirmação digital','Financeiro completo: caixa, despesas, crediário','Gestão de equipe: agenda, comissão, desempenho','Dashboard · Relatórios · Chat · Lembretes automáticos'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você para de apagar incêndio e começa a gerir de verdade.',
+          sub:'Feito do zero para barbearia — não adaptado de outro setor.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Comece seu teste grátis.',
+          sub:'14 dias. Sem cartão.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+
+    // ── SEMANA 3 ─────────────────────────────
+    {
+      id:'s3-seg', week:3,
+      title:'Segunda — Fidelização',
+      desc:'Seu cliente sumiu? Com o Raizly você sabe antes de perder.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'fidelização', icon:'🔁',
+          headline:'Seu cliente veio mês passado. E esse mês?',
+          sub:'A maioria dos donos de barbearia não sabe a resposta. O Raizly sabe.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Com o Raizly você enxerga:',
+          features:['Data do último atendimento de cada cliente','Serviços favoritos e barbeiro preferido','Frequência média de visita por cliente','Clientes que não voltam há mais de 30 dias'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você age antes de perder o cliente de vez.',
+          sub:'Fidelizar é mais barato do que conquistar cliente novo. Agora você tem os dados para fazer isso.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Fidelize com dado, não com chute.',
+          sub:'14 dias grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s3-ter', week:3,
+      title:'Terça — No-show',
+      desc:'Horário vazio é dinheiro que não entrou. Evite.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'no-show', icon:'🚫',
+          headline:'Cliente marcou. Não apareceu. Acontece toda semana.',
+          sub:'Esse horário vazio custou dinheiro. E você podia ter evitado.' },
+        { bg:'bone', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O Raizly age antes da falta acontecer:',
+          features:['Lembrete automático enviado antes do horário','Cliente precisa confirmar digitalmente — sem você perguntar','Histórico de faltas por cliente no sistema','Você sabe quem falta com frequência antes de confirmar encaixe'] },
+        { bg:'rust', type:'benefit', num:'03', tag:'resultado',
+          headline:'Quando o sistema lembra o cliente, ele aparece.',
+          sub:'Menos horário vazio. Mais previsibilidade. Mais receita.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Reduza suas faltas agora.',
+          sub:'14 dias grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s3-qua', week:3,
+      title:'Quarta — Crediário Digital',
+      desc:'Quem deve, quanto e quando. Sem caderninho.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'bone', type:'hook', num:'01', tag:'crediário', icon:'📒',
+          headline:'Você ainda controla fiado em caderninho?',
+          sub:'Caderninho rasga, molha, some. Dívida não.' },
+        { bg:'rust', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Crediário digital no Raizly:',
+          features:['Registra o cliente, o valor e a data combinada para pagar','Aviso quando o pagamento vence','Histórico completo de cada débito e quitação','Você vê o saldo devedor total em tempo real'] },
+        { bg:'ink', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você cobra com calma porque tem o registro.',
+          sub:'Sem constrangimento. Sem esquecer. Sem perder dinheiro por falta de controle.' },
+        { bg:'bone', type:'cta', num:'04', tag:'raizly',
+          headline:'Digitalize seu crediário.',
+          sub:'14 dias grátis em raizly.tech',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s3-qui', week:3,
+      title:'Quinta — Histórico do Cliente',
+      desc:'Cada cliente com seu perfil. Atenda como se conhecesse há anos.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'histórico', icon:'🪪',
+          headline:'Você lembra o que o cliente preferiu na última vez?',
+          sub:'E se tiver 3 barbeiros? E se a equipe crescer? Memória não escala. Sistema escala.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Cada cliente com seu perfil no Raizly:',
+          features:['Serviços que sempre pede','Barbeiro preferido','Histórico de atendimentos e valores pagos','Forma de pagamento habitual'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Qualquer barbeiro atende o cliente como se o conhecesse há anos.',
+          sub:'Isso é o que faz o cliente voltar. E recomendar.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Conheça seus clientes melhor.',
+          sub:'14 dias grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s3-sex', week:3,
+      title:'Sexta — Com sistema vs. Sem sistema',
+      desc:'A diferença não é o tamanho da barbearia. É a ferramenta.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'comparação', icon:'⚖️',
+          headline:'Duas barbearias. Mesma cidade. Resultados diferentes.',
+          sub:'A diferença não é o tamanho. É o jeito de gerir.' },
+        { bg:'rust', type:'features', num:'02', tag:'diferença',
+          headline:'Sem sistema vs. Com Raizly:',
+          features:['Agenda: WhatsApp e papel  →  digital por barbeiro','Financeiro: chute no fim do mês  →  relatório automático','Equipe: feeling sobre quem produz  →  dado real','Cliente: você não sabe quem sumiu  →  alerta automático'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'O dono que tem sistema toma decisão melhor.',
+          sub:'Não é tecnologia pela tecnologia. É controle sobre o próprio negócio.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Escolha o lado certo.',
+          sub:'14 dias grátis em raizly.tech',
+          cta_url:'raizly.tech' }
+      ]
+    },
+
+    // ── SEMANA 4 ─────────────────────────────
+    {
+      id:'s4-seg', week:4,
+      title:'Segunda — Tempo Livre',
+      desc:'O que você ganha quando o sistema cuida do operacional.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'bone', type:'hook', num:'01', tag:'tempo', icon:'⏱️',
+          headline:'Você trabalha na barbearia ou na gestão da barbearia?',
+          sub:'Se a resposta é "nos dois", você está fazendo o trabalho que o sistema deveria fazer.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O que o Raizly automatiza pra você:',
+          features:['Agendamento: cliente marca sozinho, você confirma em 1 clique','Lembretes: o sistema avisa o cliente, você não precisa','Relatórios: prontos todo dia, sem você montar nada','Financeiro: fechamento automático, sem planilha'] },
+        { bg:'rust', type:'benefit', num:'03', tag:'resultado',
+          headline:'Cada hora economizada em tarefa operacional é uma hora para crescer.',
+          sub:'Ou descansar. As duas são válidas.' },
+        { bg:'bone', type:'cta', num:'04', tag:'raizly',
+          headline:'Recupere seu tempo.',
+          sub:'14 dias grátis em raizly.tech',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s4-ter', week:4,
+      title:'Terça — Profissionalização',
+      desc:'Sua barbearia no nível que o cliente quer recomendar.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'profissional', icon:'🏆',
+          headline:'Sua barbearia parece profissional por fora. E por dentro?',
+          sub:'Cliente percebe quando tem processo. E recomenda mais.' },
+        { bg:'ink', type:'features', num:'02', tag:'funcionalidade',
+          headline:'O que o Raizly entrega de imagem:',
+          features:['Link de agendamento com o nome da sua barbearia','Confirmação e lembrete com identidade profissional','Sistema que o cliente usa fácil, sem explicação','Você aparece como negócio sério — porque é'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'A barbearia que o cliente recomenda tem processo, organização e sistema.',
+          sub:'Isso é profissionalização.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Profissionalize sua barbearia.',
+          sub:'14 dias grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s4-qua', week:4,
+      title:'Quarta — Como Começar',
+      desc:'Mais rápido do que você pensa. Veja o processo.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'onboarding', icon:'🚀',
+          headline:'Quanto tempo leva para o Raizly funcionar na sua barbearia?',
+          sub:'Menos do que você pensa. Veja o processo completo.' },
+        { bg:'bone', type:'features', num:'02', tag:'como começar',
+          headline:'Em 4 passos simples:',
+          features:['① Cadastra sua barbearia: nome, endereço, serviços','② Adiciona seus barbeiros com horários e especialidades','③ Publica seu link de agendamento para os clientes','④ Começa a receber agendamentos ainda hoje'] },
+        { bg:'rust', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você não precisa de treinamento longo. Nem de técnico.',
+          sub:'O sistema foi feito para o dono configurar sozinho, no próprio celular.' },
+        { bg:'ink', type:'cta', num:'04', tag:'raizly',
+          headline:'Configure agora.',
+          sub:'14 dias grátis em raizly.tech',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s4-qui', week:4,
+      title:'Quinta — Controle Remoto',
+      desc:'Sua barbearia no celular, onde você estiver.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'rust', type:'hook', num:'01', tag:'controle', icon:'📱',
+          headline:'O que acontece na sua barbearia quando você não está lá?',
+          sub:'Se você não sabe a resposta em tempo real, você não tem controle. Tem esperança.' },
+        { bg:'bone', type:'features', num:'02', tag:'funcionalidade',
+          headline:'Com o Raizly no celular:',
+          features:['Veja agendamentos do dia de qualquer lugar','Acompanhe faturamento em tempo real','Monitore quem está atendendo e o que já fechou','Receba alertas de cancelamento ou mudança de agenda'] },
+        { bg:'ink', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você não precisa estar presente para estar no controle.',
+          sub:'Essa é a diferença entre gerir e só trabalhar.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Tenha controle de onde estiver.',
+          sub:'14 dias grátis.',
+          cta_url:'raizly.tech' }
+      ]
+    },
+    {
+      id:'s4-sex', week:4,
+      title:'Sexta — Por que Raizly',
+      desc:'Feito para barbearia. Não adaptado de outro setor.',
+      tag:'Carrossel',
+      slides:[
+        { bg:'ink', type:'hook', num:'01', tag:'raizly', icon:'💈',
+          headline:'Existem outros sistemas no mercado.',
+          sub:'Mas existe diferença entre um sistema genérico adaptado e um feito do zero para barbearia.' },
+        { bg:'rust', type:'features', num:'02', tag:'diferencial',
+          headline:'O que faz o Raizly diferente:',
+          features:['Terminologia de barbearia — não de restaurante ou salão','Fluxo de agendamento pensado para o jeito que barbeiro trabalha','Crediário e comissão — funcionalidades que o setor precisa','Suporte que entende o negócio, não só o sistema'] },
+        { bg:'bone', type:'benefit', num:'03', tag:'resultado',
+          headline:'Você não adapta sua barbearia ao sistema.',
+          sub:'O sistema foi construído para o jeito que barbearia funciona.' },
+        { bg:'rust', type:'cta', num:'04', tag:'raizly',
+          headline:'Comece grátis agora.',
+          sub:'14 dias. Sem cartão.',
+          cta_url:'raizly.tech' }
+      ]
+    }
+
+  ];
+  </script>
+
+  <script>
+  /* RENDER */
+  function owlSVG(size, isBone) {
+    size = size || 16;
+    var bg = isBone ? 'rgba(17,17,17,0.12)' : 'rgba(0,0,0,0.25)';
+    return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 72 72" fill="none" style="flex-shrink:0">'
+      +'<rect width="72" height="72" rx="14" fill="'+bg+'"/>'
+      +'<g transform="rotate(-22,36,36)">'
+      +'<rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>'
+      +'<circle cx="36" cy="22" r="6.5" fill="#111"/><circle cx="36" cy="22" r="3" fill="#E8430A"/>'
+      +'<circle cx="37.5" cy="20.5" r="1.2" fill="white"/>'
+      +'<circle cx="36" cy="40" r="6.5" fill="#111"/><circle cx="36" cy="40" r="3" fill="#E8430A"/>'
+      +'<circle cx="37.5" cy="38.5" r="1.2" fill="white"/>'
+      +'<polygon points="36,29 33,33 39,33" fill="#111"/>'
+      +'</g>'
+      +'<polygon points="26,10 31,18 21,18" fill="#E8430A"/>'
+      +'<polygon points="46,10 51,18 41,18" fill="#E8430A"/>'
+      +'</svg>';
+  }
+
+  function renderSlide(slide, total, postId, idx) {
+    var dots = '';
+    for (var d=0;d<total;d++) dots += '<div class="sl-dot'+(d===idx?' active':'')+'"></div>';
+
+    var body = '';
+    var isBone = slide.bg === 'bone';
+    if (slide.type === 'hook') {
+      body = (slide.icon ? '<div class="sl-icon">'+slide.icon+'</div>' : '')
+        +'<div class="sl-headline">'+slide.headline+'</div>'
+        +(slide.sub ? '<div class="sl-sub">'+slide.sub+'</div>' : '');
+    } else if (slide.type === 'features') {
+      var fl = '';
+      for (var f=0;f<slide.features.length;f++)
+        fl += '<div class="sl-feat"><div class="sl-feat-dot"></div><span>'+slide.features[f]+'</span></div>';
+      body = '<div class="sl-headline" style="align-self:flex-start;text-align:left">'+slide.headline+'</div>'
+        +'<div class="sl-features">'+fl+'</div>';
+    } else if (slide.type === 'benefit') {
+      body = '<div class="sl-headline">'+slide.headline+'</div>'
+        +(slide.sub ? '<div class="sl-sub">'+slide.sub+'</div>' : '');
+    } else if (slide.type === 'cta') {
+      body = '<div class="sl-headline">'+slide.headline+'</div>'
+        +(slide.sub ? '<div class="sl-body-text">'+slide.sub+'</div>' : '')
+        +'<div class="sl-cta-url">'+slide.cta_url+'</div>';
+    }
+
+    var wmColor = isBone ? 'rgba(17,17,17,0.4)' : 'rgba(255,255,255,0.5)';
+    var numPad = String(total).padStart(2,'0');
+
+    return '<div class="slide-canvas bg-'+slide.bg+'" data-post="'+postId+'" data-slide="'+idx+'">'
+      +'<div class="sl-header">'
+      +'<span class="sl-num">slide '+slide.num+' / '+numPad+'</span>'
+      +'<span class="sl-tag">'+slide.tag+'</span>'
+      +'</div>'
+      +'<div class="sl-body">'+body+'</div>'
+      +'<div class="sl-footer">'
+      +'<div class="sl-logo">'+owlSVG(16, isBone)+'<span class="sl-logo-wm" style="color:'+wmColor+'">raizly</span></div>'
+      +'<div class="sl-dots">'+dots+'</div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  function renderCard(post) {
+    var slide0 = renderSlide(post.slides[0], post.slides.length, post.id, 0);
+    return '<div class="art-card" id="card-'+post.id+'">'
+      +'<div class="slide-thumb-wrap" onclick="openModal(\''+post.id+'\',0)">'
+      +slide0
+      +'<div class="thumb-overlay">👁 Visualizar</div>'
+      +'</div>'
+      +'<div class="card-foot">'
+      +'<div class="card-meta"><span class="card-title">'+post.title+'</span><span class="card-tag">'+post.tag+'</span></div>'
+      +'<p class="card-desc">'+post.desc+'</p>'
+      +'<div class="dl-row">'
+      +'<button class="btn-zip" onclick="downloadZip(\''+post.id+'\',this)">⬇ ZIP ('+post.slides.length+' slides)</button>'
+      +'<button class="btn-ind" onclick="openModal(\''+post.id+'\',0);setTimeout(function(){openIndPanel();},200)">slide a slide</button>'
+      +'</div>'
+      +'<div class="mark-row">'
+      +'<button class="btn-mark" onclick="togglePosted(\''+post.id+'\')">Marcar como postado</button>'
+      +'<span class="posted-stamp"></span>'
+      +'</div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  function init() {
+    [1,2,3,4].forEach(function(w) {
+      var posts = POSTS.filter(function(p){ return p.week===w; });
+      document.getElementById('grid-s'+w).innerHTML = posts.map(renderCard).join('');
+    });
+    POSTS.forEach(function(p){ updateCardUI(p.id); });
+    updateFilterCounts();
+  }
+
+  init();
+  </script>
+
+  <script>
+  /* MODAL */
+  var _mp = null, _mi = 0;
+
+  function openModal(postId, idx) {
+    _mp = POSTS.filter(function(p){ return p.id===postId; })[0];
+    _mi = idx;
+    _renderModal();
+    document.getElementById('modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal').classList.remove('open');
+    document.body.style.overflow = '';
+    document.getElementById('ind-panel').classList.remove('open');
+  }
+
+  function modalNav(dir) {
+    _mi = (_mi + dir + _mp.slides.length) % _mp.slides.length;
+    _renderModal();
+  }
+
+  function _renderModal() {
+    var post = _mp, total = post.slides.length;
+    document.getElementById('modal-info').textContent = post.title+' · slide '+(_mi+1)+' / '+total;
+    document.getElementById('modal-slide-wrap').innerHTML = renderSlide(post.slides[_mi], total, post.id, _mi);
+
+    var de = document.getElementById('modal-dots');
+    de.innerHTML = '';
+    for (var i=0;i<total;i++) {
+      (function(ii){ var d=document.createElement('div'); d.className='modal-dot'+(ii===_mi?' active':'');
+        d.onclick=function(){ openModal(post.id,ii); }; de.appendChild(d); })(i);
+    }
+    document.getElementById('modal-prev').classList.toggle('hidden', total<=1);
+    document.getElementById('modal-next').classList.toggle('hidden', total<=1);
+
+    var bz = document.getElementById('modal-btn-zip');
+    bz.textContent = '⬇ Baixar ZIP ('+total+' slides)';
+    (function(pid){ bz.onclick=function(){ downloadZip(pid,bz); }; })(post.id);
+    _buildIndPanel();
+  }
+
+  function _buildIndPanel() {
+    var post = _mp, html='';
+    for (var i=0;i<post.slides.length;i++) {
+      html += '<div class="ind-row">'
+        +'<div class="ind-thumb">'+renderSlide(post.slides[i],post.slides.length,post.id,i)+'</div>'
+        +'<span class="ind-name">'+post.id+'-slide-'+(i+1)+'.png</span>'
+        +'<button class="ind-dl" onclick="downloadSingle(\''+post.id+'\','+i+',this)">⬇</button>'
+        +'</div>';
+    }
+    document.getElementById('ind-panel').innerHTML = html;
+  }
+
+  function openIndPanel() { document.getElementById('ind-panel').classList.toggle('open'); }
+  function toggleIndPanel() { openIndPanel(); }
+
+  document.addEventListener('keydown', function(e) {
+    if (!document.getElementById('modal').classList.contains('open')) return;
+    if (e.key==='Escape') closeModal();
+    if (e.key==='ArrowLeft') modalNav(-1);
+    if (e.key==='ArrowRight') modalNav(1);
+  });
+  document.getElementById('modal').addEventListener('click', function(e) {
+    if (e.target===document.getElementById('modal')) closeModal();
+  });
+  </script>
+
+  <script>
+  /* DOWNLOAD */
+  async function captureSlide(post, idx) {
+    var slide = post.slides[idx], total = post.slides.length;
+    var c = document.createElement('div');
+    c.style.cssText = 'position:fixed;left:-9999px;top:-9999px;width:1080px;height:1350px;overflow:hidden;font-family:\'Familjen Grotesk\',sans-serif;font-size:18px;';
+    c.innerHTML = renderSlide(slide, total, post.id, idx);
+    var el = c.querySelector('.slide-canvas');
+    el.style.width='1080px'; el.style.height='1350px';
+    var q = function(sel, fn){ el.querySelectorAll(sel).forEach(fn); };
+    q('.sl-headline', function(e){ e.style.fontSize='34px'; e.style.lineHeight='1.2'; });
+    q('.sl-sub', function(e){ e.style.fontSize='20px'; });
+    q('.sl-body-text', function(e){ e.style.fontSize='20px'; });
+    q('.sl-num,.sl-tag', function(e){ e.style.fontSize='16px'; });
+    q('.sl-logo-wm', function(e){ e.style.fontSize='18px'; });
+    q('.sl-feat', function(e){ e.style.fontSize='19px'; });
+    q('.sl-cta-url', function(e){ e.style.fontSize='18px'; });
+    q('.sl-icon', function(e){ e.style.fontSize='64px'; });
+    q('.sl-dot', function(e){ e.style.width='8px'; e.style.height='8px'; });
+    q('.sl-feat-dot', function(e){ e.style.width='10px'; e.style.height='10px'; e.style.marginTop='5px'; });
+    document.body.appendChild(c);
+    try {
+      var r = await html2canvas(c, { width:1080, height:1350, scale:1, useCORS:true, allowTaint:true, backgroundColor:null, logging:false });
+      return r.toDataURL('image/png');
+    } finally { document.body.removeChild(c); }
+  }
+
+  async function downloadSingle(postId, idx, btn) {
+    var post = POSTS.filter(function(p){ return p.id===postId; })[0];
+    var orig = btn ? btn.textContent : '';
+    if (btn) { btn.textContent='…'; btn.disabled=true; }
+    try {
+      var url = await captureSlide(post, idx);
+      var a = document.createElement('a');
+      a.download = post.id+'-slide-'+(idx+1)+'.png'; a.href=url; a.click();
+      showToast('✓ '+a.download+' baixado');
+    } catch(e){ console.error(e); showToast('Erro ao gerar PNG'); }
+    finally { if(btn){ btn.textContent=orig; btn.disabled=false; } }
+  }
+
+  async function downloadZip(postId, btn) {
+    var post = POSTS.filter(function(p){ return p.id===postId; })[0];
+    var orig = btn ? btn.textContent : '';
+    if (btn) { btn.classList.add('loading'); btn.textContent='Gerando…'; }
+    try {
+      var zip = new JSZip();
+      for (var i=0;i<post.slides.length;i++) {
+        if (btn) btn.textContent='Slide '+(i+1)+'/'+post.slides.length+'…';
+        var url = await captureSlide(post, i);
+        zip.file(post.id+'-slide-'+(i+1)+'.png', url.split(',')[1], {base64:true});
+      }
+      var blob = await zip.generateAsync({type:'blob'});
+      var a = document.createElement('a');
+      a.download = post.id+'-carrossel.zip'; a.href=URL.createObjectURL(blob); a.click();
+      URL.revokeObjectURL(a.href);
+      showToast('✓ '+a.download+' ('+post.slides.length+' slides)');
+    } catch(e){ console.error(e); showToast('Erro ao gerar ZIP'); }
+    finally { if(btn){ btn.classList.remove('loading'); btn.textContent=orig; } }
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(function(){ t.classList.remove('show'); }, 3200);
+  }
+  </script>
+
+  <script>
+  /* POSTED TRACKING */
+  var STORAGE_KEY = 'raizly_posted_v1';
+
+  function getPosted() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }
+    catch(e) { return {}; }
+  }
+
+  function togglePosted(postId) {
+    var posted = getPosted();
+    if (posted[postId]) { delete posted[postId]; }
+    else { posted[postId] = new Date().toISOString(); }
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(posted));
+    updateCardUI(postId);
+    updateFilterCounts();
+    applyFilter();
+  }
+
+  function updateCardUI(postId) {
+    var card = document.getElementById('card-'+postId);
+    if (!card) return;
+    var posted = getPosted();
+    var ts = posted[postId];
+    var btn = card.querySelector('.btn-mark');
+    var stamp = card.querySelector('.posted-stamp');
+    if (ts) {
+      card.classList.add('posted');
+      var d = new Date(ts);
+      var fmt = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      if (btn) { btn.textContent='✓ Postado em '+fmt; btn.classList.add('marked'); }
+      if (stamp) { stamp.style.display='none'; }
+    } else {
+      card.classList.remove('posted');
+      if (btn) { btn.textContent='Marcar como postado'; btn.classList.remove('marked'); }
+      if (stamp) { stamp.style.display='none'; }
+    }
+  }
+
+  /* FILTER */
+  var _filter = 'all';
+
+  function setFilter(f) {
+    _filter = f;
+    document.querySelectorAll('.filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('filter-'+f).classList.add('active');
+    applyFilter();
+  }
+
+  function applyFilter() {
+    var posted = getPosted();
+    [1,2,3,4].forEach(function(w) {
+      var posts = POSTS.filter(function(p){ return p.week===w; });
+      var visible = 0;
+      posts.forEach(function(p) {
+        var card = document.getElementById('card-'+p.id);
+        if (!card) return;
+        var isPosted = !!posted[p.id];
+        var show = _filter==='all' || (_filter==='posted' && isPosted) || (_filter==='pending' && !isPosted);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      var emptyEl = document.getElementById('empty-s'+w);
+      if (emptyEl) emptyEl.style.display = (visible===0 && _filter!=='all') ? 'block' : 'none';
+    });
+  }
+
+  function updateFilterCounts() {
+    var posted = getPosted();
+    var postedCount = Object.keys(posted).length;
+    var total = POSTS.length;
+    document.getElementById('count-all').textContent = total;
+    document.getElementById('count-posted').textContent = postedCount;
+    document.getElementById('count-pending').textContent = total - postedCount;
+  }
+  </script>
+
+</body>
+</html>

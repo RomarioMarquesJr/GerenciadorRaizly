@@ -1,0 +1,12 @@
+{
+  "name": "gerenciador-raizly",
+  "version": "1.0.0",
+  "description": "Gerenciador de artes Instagram do Raizly",
+  "scripts": {
+    "dev": "npx serve . -p 3000 --no-clipboard",
+    "start": "npx serve . -p 3000 --no-clipboard"
+  },
+  "keywords": ["raizly", "instagram", "barbearia"],
+  "author": "Raizly / HEADLY TECH",
+  "license": "UNLICENSED"
+}

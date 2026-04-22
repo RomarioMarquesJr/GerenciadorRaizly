@@ -1,0 +1,1755 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Raizly — Brandbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet"/>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bone:   #F0EDE6;
+  --ink:    #111111;
+  --rust:   #E8430A;
+  --mid:    #888888;
+  --dim:    #333333;
+  --bone2:  #E5E1D8;
+  --rust2:  #C23608;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bone);
+  color: var(--ink);
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-weight: 400;
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+/* ─── UTILITIES ─── */
+.mono { font-family: 'JetBrains Mono', monospace; }
+.rust { color: var(--rust); }
+.mid  { color: var(--mid); }
+
+/* ─── COVER ─── */
+.cover {
+  width: 100%;
+  min-height: 100vh;
+  background: var(--ink);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 56px 64px;
+  position: relative;
+  overflow: hidden;
+}
+
+.cover-grain {
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.cover-grid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(240,237,230,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(240,237,230,0.03) 1px, transparent 1px);
+  background-size: 80px 80px;
+  pointer-events: none;
+}
+
+.cover-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  z-index: 1;
+}
+
+.cover-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  color: var(--dim);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.cover-center {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.cover-logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 28px;
+}
+
+.cover-wordmark {
+  font-weight: 800;
+  font-size: clamp(80px, 14vw, 160px);
+  letter-spacing: -8px;
+  color: var(--bone);
+  line-height: 0.9;
+}
+
+.cover-tagline {
+  font-size: 14px;
+  color: var(--dim);
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.cover-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
+.cover-doc-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--dim);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+}
+
+.cover-version {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--rust);
+  letter-spacing: 2px;
+}
+
+/* ─── SECTION ─── */
+.section {
+  width: 100%;
+  padding: 96px 64px;
+}
+
+.section-dark {
+  background: var(--ink);
+  color: var(--bone);
+}
+
+.section-rust {
+  background: var(--rust);
+  color: var(--bone);
+}
+
+.section-mid {
+  background: #1a1a1a;
+  color: var(--bone);
+}
+
+/* ─── SECTION HEADER ─── */
+.section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  margin-bottom: 72px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+.section-dark .section-header,
+.section-mid .section-header { border-bottom-color: rgba(255,255,255,0.08); }
+.section-rust .section-header { border-bottom-color: rgba(0,0,0,0.15); }
+
+.section-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--rust);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  padding-top: 6px;
+  min-width: 48px;
+}
+.section-rust .section-num { color: var(--ink); opacity: 0.5; }
+
+.section-title {
+  font-weight: 800;
+  font-size: clamp(40px, 6vw, 72px);
+  letter-spacing: -3px;
+  line-height: 0.95;
+}
+
+/* ─── INTRO SECTION ─── */
+.intro-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+.intro-text {
+  font-size: 18px;
+  line-height: 1.7;
+  color: var(--dim);
+}
+
+.intro-text strong {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.brand-pillars {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.pillar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px 24px;
+  background: var(--ink);
+  color: var(--bone);
+}
+
+.pillar:first-child { border-radius: 12px 12px 0 0; }
+.pillar:last-child  { border-radius: 0 0 12px 12px; }
+
+.pillar-num {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--rust);
+  width: 20px;
+  flex-shrink: 0;
+}
+
+.pillar-name {
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.5px;
+  flex: 1;
+}
+
+.pillar-desc {
+  font-size: 12px;
+  color: #666;
+  text-align: right;
+  max-width: 120px;
+}
+
+/* ─── COLORS ─── */
+.colors-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 56px;
+}
+
+.color-card {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.color-swatch {
+  height: 200px;
+  display: flex;
+  align-items: flex-end;
+  padding: 24px;
+}
+
+.color-info {
+  padding: 24px;
+  background: var(--ink);
+}
+
+.color-name {
+  font-weight: 800;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  color: var(--bone);
+  margin-bottom: 4px;
+}
+
+.color-hex {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: var(--rust);
+}
+
+.color-role {
+  font-size: 12px;
+  color: #555;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.color-usage-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 100px;
+  overflow: hidden;
+  margin-top: 48px;
+  gap: 4px;
+}
+.bar-bone { background: var(--bone); border: 1px solid rgba(0,0,0,0.1); }
+.bar-ink  { background: var(--ink); }
+.bar-rust { background: var(--rust); }
+
+.color-legend {
+  display: flex;
+  gap: 32px;
+  margin-top: 16px;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--mid);
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+/* ─── TYPOGRAPHY ─── */
+.type-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.type-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  align-items: center;
+  padding: 32px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  gap: 40px;
+}
+
+.type-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.type-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--rust);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.type-spec {
+  font-size: 11px;
+  color: #555;
+  line-height: 1.5;
+}
+
+.type-sample-display {
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 64px;
+  letter-spacing: -3px;
+  color: var(--bone);
+  line-height: 0.95;
+}
+
+.type-sample-heading {
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -1.5px;
+  color: var(--bone);
+}
+
+.type-sample-body {
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-weight: 400;
+  font-size: 17px;
+  color: #888;
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.type-sample-ui {
+  font-family: 'Familjen Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: 0.3px;
+  color: #666;
+}
+
+.type-sample-mono {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 500;
+  font-size: 15px;
+  color: var(--rust);
+  letter-spacing: 0;
+}
+
+.font-specimens {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  margin-top: 56px;
+}
+
+.specimen {
+  background: #1a1a1a;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.specimen:first-child { border-radius: 12px 0 0 0; }
+.specimen:nth-child(2) { border-radius: 0 12px 0 0; }
+.specimen:nth-child(3) { border-radius: 0 0 0 12px; }
+.specimen:last-child { border-radius: 0 0 12px 0; }
+
+.specimen-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--rust);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.specimen-alpha {
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  color: #444;
+  line-height: 1.3;
+}
+
+.specimen-alpha.mono-font {
+  font-family: 'JetBrains Mono', monospace;
+  font-weight: 400;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+/* ─── LOGO ─── */
+.logo-versions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.logo-panel {
+  border-radius: 16px;
+  padding: 48px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.logo-panel-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  opacity: 0.4;
+}
+
+.logo-lockup {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.logo-wm {
+  font-weight: 800;
+  font-size: 42px;
+  letter-spacing: -2.5px;
+  line-height: 1;
+}
+
+/* Logo breakdown */
+.logo-breakdown {
+  background: #0d0d0d;
+  border-radius: 16px;
+  padding: 56px;
+  margin-bottom: 40px;
+}
+
+.breakdown-title {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: var(--rust);
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  margin-bottom: 40px;
+}
+
+.breakdown-steps {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.breakdown-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.breakdown-step-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #444;
+  letter-spacing: 1px;
+}
+
+.breakdown-arrow {
+  font-size: 20px;
+  color: #333;
+  padding: 0 4px;
+}
+
+/* Logo clearspace */
+.clearspace-demo {
+  background: var(--bone2);
+  border-radius: 16px;
+  padding: 56px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 40px;
+  position: relative;
+}
+
+.clearspace-box {
+  position: relative;
+  padding: 32px;
+}
+
+.clearspace-guides {
+  position: absolute;
+  inset: 0;
+  border: 1px dashed rgba(232,67,10,0.3);
+  pointer-events: none;
+}
+
+.clearspace-label-top, .clearspace-label-bottom, 
+.clearspace-label-left, .clearspace-label-right {
+  position: absolute;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--rust);
+  opacity: 0.6;
+}
+.clearspace-label-top    { top: -18px; left: 50%; transform: translateX(-50%); }
+.clearspace-label-bottom { bottom: -18px; left: 50%; transform: translateX(-50%); }
+.clearspace-label-left   { left: -20px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+.clearspace-label-right  { right: -20px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+
+/* Do/Don't */
+.dos-donts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.do-card, .dont-card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.do-card-header, .dont-card-header {
+  padding: 12px 20px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.do-card-header   { background: rgba(232,67,10,0.15); color: var(--rust); }
+.dont-card-header { background: rgba(255,255,255,0.05); color: #555; }
+
+.do-card-body, .dont-card-body {
+  padding: 32px;
+  background: #1a1a1a;
+  min-height: 160px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── VOICE ─── */
+.voice-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 56px;
+}
+
+.voice-card {
+  padding: 40px;
+  border-radius: 12px;
+  background: #1a1a1a;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.voice-card-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--rust);
+}
+
+.voice-card-title {
+  font-weight: 800;
+  font-size: 22px;
+  letter-spacing: -0.5px;
+  color: var(--bone);
+}
+
+.voice-card-desc {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+.voice-example {
+  font-size: 14px;
+  color: #888;
+  font-style: italic;
+  line-height: 1.5;
+  padding: 12px 16px;
+  border-left: 2px solid var(--rust);
+  background: rgba(232,67,10,0.05);
+}
+
+/* Exemplos de copy */
+.copy-examples {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.copy-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+.copy-bad, .copy-good {
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.copy-bad  { background: #1a1a1a; color: #555; }
+.copy-good { background: #1a1a1a; color: var(--bone); }
+
+.copy-bad:hover  { background: #1f1f1f; }
+.copy-good:hover { background: #202020; }
+
+.copy-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  opacity: 0.7;
+}
+
+.copy-row:first-child .copy-bad,
+.copy-row:first-child .copy-good { border-radius: 12px 12px 0 0; }
+.copy-row:last-child .copy-bad { border-radius: 0 0 0 12px; }
+.copy-row:last-child .copy-good { border-radius: 0 0 12px 0; }
+
+/* ─── MOCKUPS ─── */
+.mockups-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 40px;
+}
+
+.mockup-card {
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0d0d0d;
+  display: flex;
+  flex-direction: column;
+}
+
+.mockup-preview {
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+}
+
+.mockup-meta {
+  padding: 20px 24px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.mockup-meta-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px;
+  color: var(--rust);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.mockup-meta-name {
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--bone);
+}
+
+/* Pill */
+.pill {
+  background: var(--rust);
+  border-radius: 100px;
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pill span {
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -1px;
+  color: white;
+}
+
+/* App icon */
+.appicon-wrap {
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 64px rgba(0,0,0,0.6);
+}
+
+/* Fav chip */
+.fav-chip {
+  background: #2a2a2a;
+  border-radius: 8px;
+  padding: 10px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid #333;
+}
+.fav-chip-url {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #555;
+}
+
+/* Watermark */
+.watermark {
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: -3px;
+  color: rgba(240,237,230,0.04);
+  white-space: nowrap;
+}
+
+/* ─── SPACING SYSTEM ─── */
+.spacing-grid {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.space-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.space-block {
+  background: var(--rust);
+  width: 40px;
+  opacity: 0.8;
+}
+
+.space-label {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #555;
+  letter-spacing: 1px;
+}
+
+/* ─── CONTACT / FOOTER ─── */
+.footer {
+  background: var(--ink);
+  padding: 80px 64px 56px;
+  display: flex;
+  flex-direction: column;
+  gap: 64px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.footer-brand {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-wordmark {
+  font-weight: 800;
+  font-size: 48px;
+  letter-spacing: -3px;
+  color: var(--bone);
+  line-height: 1;
+}
+
+.footer-tagline {
+  font-size: 14px;
+  color: #444;
+}
+
+.footer-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: right;
+}
+
+.footer-link {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: #444;
+  letter-spacing: 1px;
+}
+
+.footer-link span {
+  color: var(--rust);
+}
+
+.footer-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 32px;
+  border-top: 1px solid #1f1f1f;
+}
+
+.footer-copy {
+  font-size: 12px;
+  color: #333;
+}
+
+.footer-version {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  color: #2a2a2a;
+  letter-spacing: 2px;
+}
+
+/* ─── NAV ─── */
+.nav {
+  position: fixed;
+  top: 32px;
+  right: 40px;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.nav-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(240,237,230,0.2);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.nav-dot:hover,
+.nav-dot.active {
+  background: var(--rust);
+  transform: scale(1.5);
+}
+
+/* ─── DIVIDER ─── */
+.divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(232,67,10,0.3), transparent);
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .section { padding: 64px 32px; }
+  .cover { padding: 40px 32px; }
+  .intro-grid, .colors-grid, .logo-versions,
+  .dos-donts, .voice-grid, .mockups-row,
+  .copy-row, .font-specimens { grid-template-columns: 1fr; }
+  .cover-wordmark { font-size: 64px; }
+  .section-title { font-size: 40px; }
+  .type-row { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV DOTS -->
+<nav class="nav" id="nav">
+  <div class="nav-dot active" onclick="scrollTo(0,0)" title="Capa"></div>
+  <div class="nav-dot" onclick="document.getElementById('intro').scrollIntoView({behavior:'smooth'})" title="Essência"></div>
+  <div class="nav-dot" onclick="document.getElementById('cores').scrollIntoView({behavior:'smooth'})" title="Cores"></div>
+  <div class="nav-dot" onclick="document.getElementById('tipografia').scrollIntoView({behavior:'smooth'})" title="Tipografia"></div>
+  <div class="nav-dot" onclick="document.getElementById('logo').scrollIntoView({behavior:'smooth'})" title="Logo"></div>
+  <div class="nav-dot" onclick="document.getElementById('voz').scrollIntoView({behavior:'smooth'})" title="Voz"></div>
+  <div class="nav-dot" onclick="document.getElementById('aplicacoes').scrollIntoView({behavior:'smooth'})" title="Aplicações"></div>
+</nav>
+
+<!-- ═══════════════════════════════════════
+     COVER
+════════════════════════════════════════ -->
+<section class="cover">
+  <div class="cover-grain"></div>
+  <div class="cover-grid"></div>
+
+  <div class="cover-top">
+    <span class="cover-label">Guia de Identidade Visual</span>
+    <span class="cover-label">2025 — 2026</span>
+  </div>
+
+  <div class="cover-center">
+    <div class="cover-logo-lockup">
+      <!-- OWL ICON XL -->
+      <svg width="120" height="120" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="72" height="72" rx="18" fill="#1a1a1a"/>
+        <g transform="rotate(-22, 36, 36)">
+          <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+          <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+          <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+          <circle cx="37.5" cy="20.5" r="1.2" fill="white"/>
+          <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+          <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+          <circle cx="37.5" cy="38.5" r="1.2" fill="white"/>
+          <polygon points="36,29 33,33 39,33" fill="#111111"/>
+        </g>
+        <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+        <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+      </svg>
+      <div class="cover-wordmark">raizly</div>
+    </div>
+    <div class="cover-tagline">Sistemas que pensam. Donos que dormem.</div>
+  </div>
+
+  <div class="cover-bottom">
+    <span class="cover-doc-title">BRANDBOOK — Versão 1.0</span>
+    <span class="cover-version">IA + CRM + AUTOMAÇÃO</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     01. ESSÊNCIA
+════════════════════════════════════════ -->
+<section class="section" id="intro">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2 class="section-title">Essência<br/>da Marca</h2>
+  </div>
+
+  <div class="intro-grid">
+    <div>
+      <p class="intro-text" style="margin-bottom:32px;">
+        A Raizly não é um software de barbearia.<br/><br/>
+        É a <strong>primeira vez</strong> que um dono de barbearia vai dormir sem precisar checar o WhatsApp. É o fim da planilha no Google Drive. O fim do caderno de agendamentos. O fim do "vou anotar aqui e depois vejo".<br/><br/>
+        Nossa marca carrega <strong>seriedade técnica</strong> com uma personalidade que entende o chão de barbearia — sem ser genérica, sem ser fria, sem ser mais um SaaS azul.
+      </p>
+      <div style="display:flex;gap:24px;align-items:center;">
+        <div style="text-align:center;">
+          <div style="font-weight:800;font-size:36px;letter-spacing:-2px;color:var(--rust);">∞</div>
+          <div style="font-size:11px;color:var(--mid);margin-top:4px;letter-spacing:1px;text-transform:uppercase;">Automação</div>
+        </div>
+        <div style="width:1px;height:48px;background:rgba(0,0,0,0.1);"></div>
+        <div style="text-align:center;">
+          <div style="font-weight:800;font-size:36px;letter-spacing:-2px;color:var(--ink);">AI</div>
+          <div style="font-size:11px;color:var(--mid);margin-top:4px;letter-spacing:1px;text-transform:uppercase;">Inteligência</div>
+        </div>
+        <div style="width:1px;height:48px;background:rgba(0,0,0,0.1);"></div>
+        <div style="text-align:center;">
+          <div style="font-weight:800;font-size:36px;letter-spacing:-2px;color:var(--ink);">CRM</div>
+          <div style="font-size:11px;color:var(--mid);margin-top:4px;letter-spacing:1px;text-transform:uppercase;">Relacionamento</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="brand-pillars">
+      <div class="pillar">
+        <span class="pillar-num">01</span>
+        <span class="pillar-name">Cinematic</span>
+        <span class="pillar-desc">Drama editorial, foco preciso</span>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">02</span>
+        <span class="pillar-name">Técnico</span>
+        <span class="pillar-desc">Linguagem de produto real</span>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">03</span>
+        <span class="pillar-name">Direto</span>
+        <span class="pillar-desc">Zero floreio, zero enrolação</span>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">04</span>
+        <span class="pillar-name">Misterioso</span>
+        <span class="pillar-desc">Faz pensar antes de revelar</span>
+      </div>
+      <div class="pillar">
+        <span class="pillar-num">05</span>
+        <span class="pillar-name">Brasileiro</span>
+        <span class="pillar-desc">Nasceu no Brasil, pensa global</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════
+     02. CORES
+════════════════════════════════════════ -->
+<section class="section section-dark" id="cores">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2 class="section-title">Paleta<br/>de Cores</h2>
+  </div>
+
+  <div class="colors-grid">
+    <!-- Bone -->
+    <div class="color-card">
+      <div class="color-swatch" style="background:#F0EDE6;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(17,17,17,0.3);letter-spacing:2px;">PRIMÁRIA</span>
+      </div>
+      <div class="color-info">
+        <div class="color-name">Bone</div>
+        <div class="color-hex">#F0EDE6</div>
+        <div class="color-role">Fundo principal. Textura orgânica, não branco puro. Quente. Papel de qualidade.</div>
+      </div>
+    </div>
+
+    <!-- Ink -->
+    <div class="color-card">
+      <div class="color-swatch" style="background:#111111; border: 1px solid #222;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.2);letter-spacing:2px;">PRIMÁRIA</span>
+      </div>
+      <div class="color-info">
+        <div class="color-name">Ink</div>
+        <div class="color-hex">#111111</div>
+        <div class="color-role">Tipografia principal e fundos escuros. Quase preto — tem profundidade. Não é #000000.</div>
+      </div>
+    </div>
+
+    <!-- Rust -->
+    <div class="color-card">
+      <div class="color-swatch" style="background:#E8430A;">
+        <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:rgba(255,255,255,0.4);letter-spacing:2px;">ACENTO</span>
+      </div>
+      <div class="color-info">
+        <div class="color-name">Rust</div>
+        <div class="color-hex">#E8430A</div>
+        <div class="color-role">Ação, energia, destaque. Laranja queimado — não alaranjado. Usado com parcimônia para máximo impacto.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Usage bar -->
+  <div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#444;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Proporção de uso</div>
+    <div class="color-usage-bar">
+      <div class="bar-ink bar-bone" style="flex:5;border-color:#2a2a2a;border:none;background:var(--bone);opacity:0.15;"></div>
+      <div class="bar-ink" style="flex:3;"></div>
+      <div class="bar-rust" style="flex:1;border-radius:0 100px 100px 0;"></div>
+    </div>
+    <div class="color-legend">
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--bone);border-color:rgba(255,255,255,0.1);"></div>
+        <span>Bone — 55%</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--ink);"></div>
+        <span>Ink — 35%</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-dot" style="background:var(--rust);border:none;"></div>
+        <span>Rust — 10%</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Color combos -->
+  <div style="margin-top:56px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#444;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">Combinações aprovadas</div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="border-radius:12px;overflow:hidden;width:140px;">
+        <div style="background:var(--bone);height:64px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-weight:800;font-size:20px;letter-spacing:-1px;color:var(--ink);">raizly</span>
+        </div>
+        <div style="background:#222;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:1px;">bone / ink</div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;width:140px;">
+        <div style="background:var(--ink);height:64px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-weight:800;font-size:20px;letter-spacing:-1px;color:var(--bone);">raizly</span>
+        </div>
+        <div style="background:#222;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:1px;">ink / bone</div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;width:140px;">
+        <div style="background:var(--rust);height:64px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-weight:800;font-size:20px;letter-spacing:-1px;color:var(--bone);">raizly</span>
+        </div>
+        <div style="background:#222;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:1px;">rust / bone</div>
+      </div>
+      <div style="border-radius:12px;overflow:hidden;width:140px;border:1px solid #2a2a2a;">
+        <div style="background:var(--ink);height:64px;display:flex;align-items:center;justify-content:center;">
+          <span style="font-weight:800;font-size:20px;letter-spacing:-1px;color:var(--rust);">raizly</span>
+        </div>
+        <div style="background:#222;padding:10px 14px;font-family:'JetBrains Mono',monospace;font-size:9px;color:#555;letter-spacing:1px;">ink / rust</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     03. TIPOGRAFIA
+════════════════════════════════════════ -->
+<section class="section section-mid" id="tipografia">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2 class="section-title">Sistema<br/>Tipográfico</h2>
+  </div>
+
+  <div class="type-showcase">
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-label">Display</span>
+        <span class="type-spec">Familjen Grotesk 800<br/>Size: 48–120px<br/>Tracking: −3 a −8px</span>
+      </div>
+      <div class="type-sample-display">Sistema<br/>que pensa.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-label">Heading</span>
+        <span class="type-spec">Familjen Grotesk 800<br/>Size: 24–40px<br/>Tracking: −1 a −2px</span>
+      </div>
+      <div class="type-sample-heading">Agenda inteligente para barbearias.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-label">Body</span>
+        <span class="type-spec">Familjen Grotesk 400<br/>Size: 15–18px<br/>Leading: 1.65–1.75</span>
+      </div>
+      <div class="type-sample-body">Sua barbearia precisa de um sistema que trabalhe enquanto você corta. Não de mais uma planilha para gerenciar.</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-label">UI / Label</span>
+        <span class="type-spec">Familjen Grotesk 700<br/>Size: 11–14px<br/>Tracking: 0.3–1px</span>
+      </div>
+      <div class="type-sample-ui" style="color:var(--bone);">AGENDAMENTOS HOJE &nbsp;·&nbsp; PRÓXIMO CLIENTE &nbsp;·&nbsp; ESTOQUE BAIXO</div>
+    </div>
+
+    <div class="type-row">
+      <div class="type-meta">
+        <span class="type-label">Mono / Code</span>
+        <span class="type-spec">JetBrains Mono 500<br/>Size: 11–14px<br/>Acento técnico</span>
+      </div>
+      <div class="type-sample-mono">$ raizly init --barbershop --ai-enabled<br/><span style="color:#555;">// versão 1.0.0 — sistemas que pensam</span></div>
+    </div>
+  </div>
+
+  <div class="font-specimens">
+    <div class="specimen">
+      <span class="specimen-name">Familjen Grotesk — 800</span>
+      <div class="specimen-alpha">ABCDEFGHIJKLM<br/>NOPQRSTUVWXYZ<br/>abcdefghijklm<br/>nopqrstuvwxyz<br/>0123456789</div>
+    </div>
+    <div class="specimen">
+      <span class="specimen-name">Familjen Grotesk — 400</span>
+      <div class="specimen-alpha" style="font-weight:400;color:#666;">ABCDEFGHIJKLM<br/>NOPQRSTUVWXYZ<br/>abcdefghijklm<br/>nopqrstuvwxyz<br/>0123456789</div>
+    </div>
+    <div class="specimen">
+      <span class="specimen-name">JetBrains Mono — 500</span>
+      <div class="specimen-alpha mono-font">ABCDEFGHIJKLM<br/>NOPQRSTUVWXYZ<br/>0123456789!@#$</div>
+    </div>
+    <div class="specimen">
+      <span class="specimen-name">Nunca usar</span>
+      <div style="padding:20px;background:#111;border-radius:8px;margin-top:8px;">
+        <div style="font-family:Arial,sans-serif;font-size:14px;color:#333;line-height:1.8;">
+          ✗ Arial<br/>
+          ✗ Roboto<br/>
+          ✗ Inter<br/>
+          ✗ Open Sans<br/>
+          ✗ Qualquer fonte do Google padrão
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     04. LOGO
+════════════════════════════════════════ -->
+<section class="section" id="logo">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2 class="section-title">Sistema<br/>de Logo</h2>
+  </div>
+
+  <!-- Logo versions -->
+  <div class="logo-versions">
+    <!-- Bone -->
+    <div class="logo-panel" style="background:var(--bone2);">
+      <div class="logo-lockup">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <rect width="72" height="72" rx="18" fill="#111111"/>
+          <g transform="rotate(-22, 36, 36)">
+            <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+            <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+            <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+            <circle cx="37.5" cy="20.5" r="1.2" fill="white"/>
+            <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+            <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+            <circle cx="37.5" cy="38.5" r="1.2" fill="white"/>
+            <polygon points="36,29 33,33 39,33" fill="#111111"/>
+          </g>
+          <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+          <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+        </svg>
+        <div class="logo-wm" style="color:var(--ink);">raizly</div>
+      </div>
+      <span class="logo-panel-label">Versão Bone</span>
+    </div>
+
+    <!-- Ink -->
+    <div class="logo-panel" style="background:var(--ink);">
+      <div class="logo-lockup">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <rect width="72" height="72" rx="18" fill="#E8430A"/>
+          <g transform="rotate(-22, 36, 36)">
+            <rect x="24" y="6" width="24" height="60" rx="12" fill="#111111"/>
+            <circle cx="36" cy="22" r="6.5" fill="#E8430A"/>
+            <circle cx="36" cy="22" r="3" fill="#111111"/>
+            <circle cx="37.5" cy="20.5" r="1.2" fill="white"/>
+            <circle cx="36" cy="40" r="6.5" fill="#E8430A"/>
+            <circle cx="36" cy="40" r="3" fill="#111111"/>
+            <circle cx="37.5" cy="38.5" r="1.2" fill="white"/>
+            <polygon points="36,29 33,33 39,33" fill="#E8430A"/>
+          </g>
+          <polygon points="26,10 31,18 21,18" fill="#111111"/>
+          <polygon points="46,10 51,18 41,18" fill="#111111"/>
+        </svg>
+        <div class="logo-wm" style="color:var(--bone);">raizly</div>
+      </div>
+      <span class="logo-panel-label" style="color:#444;">Versão Ink</span>
+    </div>
+
+    <!-- Rust -->
+    <div class="logo-panel" style="background:var(--rust);">
+      <div class="logo-lockup">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <rect width="72" height="72" rx="18" fill="#111111"/>
+          <g transform="rotate(-22, 36, 36)">
+            <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+            <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+            <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+            <circle cx="37.5" cy="20.5" r="1.2" fill="white"/>
+            <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+            <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+            <circle cx="37.5" cy="38.5" r="1.2" fill="white"/>
+            <polygon points="36,29 33,33 39,33" fill="#111111"/>
+          </g>
+          <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+          <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+        </svg>
+        <div class="logo-wm" style="color:var(--bone);">raizly</div>
+      </div>
+      <span class="logo-panel-label" style="color:rgba(0,0,0,0.4);">Versão Rust</span>
+    </div>
+  </div>
+
+  <!-- Breakdown -->
+  <div class="logo-breakdown">
+    <div class="breakdown-title">A lógica do ícone</div>
+    <div class="breakdown-steps">
+      <div class="breakdown-step">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <rect width="72" height="72" rx="18" fill="#1a1a1a"/>
+          <g transform="rotate(-22, 36, 36)">
+            <rect x="24" y="6" width="24" height="60" rx="12" fill="#2e2e2e"/>
+          </g>
+        </svg>
+        <span class="breakdown-step-label">O slash /</span>
+      </div>
+      <span class="breakdown-arrow">→</span>
+      <div class="breakdown-step">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <rect width="72" height="72" rx="18" fill="#1a1a1a"/>
+          <g transform="rotate(-22, 36, 36)">
+            <rect x="24" y="6" width="24" height="60" rx="12" fill="#2e2e2e"/>
+            <circle cx="36" cy="22" r="6.5" fill="#1a1a1a"/>
+            <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+            <circle cx="36" cy="40" r="6.5" fill="#1a1a1a"/>
+            <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+          </g>
+        </svg>
+        <span class="breakdown-step-label">+ olhos</span>
+      </div>
+      <span class="breakdown-arrow">→</span>
+      <div class="breakdown-step">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <rect width="72" height="72" rx="18" fill="#1a1a1a"/>
+          <g transform="rotate(-22, 36, 36)">
+            <rect x="24" y="6" width="24" height="60" rx="12" fill="#2e2e2e"/>
+            <circle cx="36" cy="22" r="6.5" fill="#1a1a1a"/>
+            <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+            <circle cx="36" cy="40" r="6.5" fill="#1a1a1a"/>
+            <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+          </g>
+          <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+          <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+        </svg>
+        <span class="breakdown-step-label">+ orelhas</span>
+      </div>
+      <span class="breakdown-arrow">→</span>
+      <div class="breakdown-step">
+        <svg width="52" height="52" viewBox="0 0 72 72" fill="none">
+          <rect width="72" height="72" rx="18" fill="#111111"/>
+          <g transform="rotate(-22, 36, 36)">
+            <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+            <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+            <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+            <circle cx="37.5" cy="20.5" r="1.2" fill="white"/>
+            <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+            <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+            <circle cx="37.5" cy="38.5" r="1.2" fill="white"/>
+            <polygon points="36,29 33,33 39,33" fill="#111111"/>
+          </g>
+          <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+          <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+        </svg>
+        <span class="breakdown-step-label" style="color:var(--rust);">coruja ✦</span>
+      </div>
+
+      <div style="margin-left:32px;border-left:1px solid #2a2a2a;padding-left:32px;display:flex;flex-direction:column;gap:12px;max-width:240px;">
+        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--rust);letter-spacing:2px;text-transform:uppercase;">Três leituras</div>
+        <div style="font-size:14px;color:#555;line-height:1.7;">
+          <span style="color:#888;">→</span> Um slash <span style="color:#666;">(código, URL, filesystem)</span><br/>
+          <span style="color:#888;">→</span> Uma coruja <span style="color:#666;">(inteligência, visão noturna)</span><br/>
+          <span style="color:#888;">→</span> Um marcador <span style="color:#666;">(anotação, insight)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Clearspace -->
+  <div>
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">Área de respiro</div>
+    <div class="clearspace-demo">
+      <div class="clearspace-box">
+        <div class="clearspace-guides"></div>
+        <div class="clearspace-label-top">1× altura do ícone</div>
+        <div class="clearspace-label-bottom">1× altura do ícone</div>
+        <div class="clearspace-label-left">1×</div>
+        <div class="clearspace-label-right">1×</div>
+        <div style="display:flex;align-items:center;gap:14px;">
+          <svg width="44" height="44" viewBox="0 0 72 72" fill="none">
+            <rect width="72" height="72" rx="18" fill="#111111"/>
+            <g transform="rotate(-22, 36, 36)">
+              <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+              <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+              <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+              <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+              <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+              <polygon points="36,29 33,33 39,33" fill="#111111"/>
+            </g>
+            <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+            <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+          </svg>
+          <div style="font-weight:800;font-size:34px;letter-spacing:-2px;color:var(--ink);">raizly</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Do/Don't -->
+  <div style="margin-top:48px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--mid);letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">Uso correto / incorreto</div>
+    <div class="dos-donts">
+      <div class="do-card">
+        <div class="do-card-header">✓ Correto</div>
+        <div class="do-card-body" style="flex-direction:column;gap:24px;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <svg width="36" height="36" viewBox="0 0 72 72" fill="none">
+              <rect width="72" height="72" rx="18" fill="#111111"/>
+              <g transform="rotate(-22, 36, 36)">
+                <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+                <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+                <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+                <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+                <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+                <polygon points="36,29 33,33 39,33" fill="#111111"/>
+              </g>
+              <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+              <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+            </svg>
+            <span style="font-weight:800;font-size:28px;letter-spacing:-1.5px;color:var(--bone);">raizly</span>
+          </div>
+          <div style="font-size:12px;color:#555;font-family:'JetBrains Mono',monospace;">proporções originais · cores da paleta · tipografia Familjen</div>
+        </div>
+      </div>
+      <div class="dont-card">
+        <div class="dont-card-header">✗ Incorreto</div>
+        <div class="dont-card-body" style="flex-direction:column;gap:12px;">
+          <div style="font-size:12px;color:#444;font-family:'JetBrains Mono',monospace;line-height:2;">
+            ✗ Distorcer proporções do ícone<br/>
+            ✗ Trocar cores por fora da paleta<br/>
+            ✗ Usar gradiente no logo<br/>
+            ✗ Trocar tipografia por outra fonte<br/>
+            ✗ Adicionar sombra ou outline<br/>
+            ✗ Usar apenas o texto sem o ícone<br/>
+            ✗ Rotacionar o lockup inteiro
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════
+     05. VOZ
+════════════════════════════════════════ -->
+<section class="section section-dark" id="voz">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2 class="section-title">Voz &amp;<br/>Tom</h2>
+  </div>
+
+  <div class="voice-grid">
+    <div class="voice-card">
+      <span class="voice-card-tag">Atributo 01</span>
+      <div class="voice-card-title">Cinematic</div>
+      <div class="voice-card-desc">Cada frase carrega peso. Imagens mentais fortes. Ritmo controlado. Não explicamos tudo de uma vez — deixamos o silêncio trabalhar.</div>
+      <div class="voice-example">"Toda noite, algum dono de barbearia abre o WhatsApp para confirmar o que já deveria estar confirmado."</div>
+    </div>
+    <div class="voice-card">
+      <span class="voice-card-tag">Atributo 02</span>
+      <div class="voice-card-title">Direto</div>
+      <div class="voice-card-desc">Sem rodeios. Sem "solução completa para otimizar seus processos". Falamos o que é, para quem é, o que faz. Ponto.</div>
+      <div class="voice-example">"CRM para barbearia. Agenda. Comissão. Estoque. Sem planilha."</div>
+    </div>
+    <div class="voice-card">
+      <span class="voice-card-tag">Atributo 03</span>
+      <div class="voice-card-title">Técnico sem ser frio</div>
+      <div class="voice-card-desc">Usamos linguagem de produto real — módulos, automação, IA — mas sempre conectada à realidade de quem vai usar o sistema.</div>
+      <div class="voice-example">"O sistema aprende quais clientes somem depois de 30 dias e manda mensagem antes de perder o cliente."</div>
+    </div>
+    <div class="voice-card">
+      <span class="voice-card-tag">Atributo 04</span>
+      <div class="voice-card-title">Provocador</div>
+      <div class="voice-card-desc">Atacamos a planilha, o caderno, o "deixa eu ver aqui" do dono. Não com deboche — com convicção de quem sabe o problema melhor do que o cliente.</div>
+      <div class="voice-example">"Você não precisa de mais um aplicativo. Você precisa de um sistema que funcione enquanto você trabalha."</div>
+    </div>
+  </div>
+
+  <!-- Copy examples -->
+  <div style="margin-top:56px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:#444;letter-spacing:2px;text-transform:uppercase;margin-bottom:20px;">Exemplos de copy</div>
+    <div class="copy-examples">
+      <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:2px;margin-bottom:2px;">
+        <div style="padding:12px 16px;background:#0d0d0d;border-radius:8px 0 0 0;font-family:'JetBrains Mono',monospace;font-size:9px;color:#333;letter-spacing:2px;display:flex;align-items:center;">CONTEXTO</div>
+        <div style="padding:12px 20px;background:#0d0d0d;font-family:'JetBrains Mono',monospace;font-size:9px;color:#333;letter-spacing:2px;display:flex;align-items:center;">✗ Evitar</div>
+        <div style="padding:12px 20px;background:#0d0d0d;border-radius:0 8px 0 0;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--rust);letter-spacing:2px;display:flex;align-items:center;">✓ Raizly</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:2px;margin-bottom:2px;">
+        <div style="padding:20px 16px;background:#111;font-size:11px;color:#555;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;">CTA</div>
+        <div style="padding:20px;background:#1a1a1a;font-size:14px;color:#444;">"Experimente nossa plataforma gratuitamente"</div>
+        <div style="padding:20px;background:#1a1a1a;font-size:14px;color:var(--bone);">"Teste agora. 14 dias. Sem cartão."</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:2px;margin-bottom:2px;">
+        <div style="padding:20px 16px;background:#111;font-size:11px;color:#555;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;">Hero</div>
+        <div style="padding:20px;background:#1a1a1a;font-size:14px;color:#444;">"A solução completa de gestão para barbearias modernas"</div>
+        <div style="padding:20px;background:#1a1a1a;font-size:14px;color:var(--bone);">"Sua barbearia roda. Você dorme."</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:2px;margin-bottom:2px;">
+        <div style="padding:20px 16px;background:#111;font-size:11px;color:#555;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;">Feature</div>
+        <div style="padding:20px;background:#1a1a1a;font-size:14px;color:#444;">"Módulo avançado de gerenciamento de comissões"</div>
+        <div style="padding:20px;background:#1a1a1a;font-size:14px;color:var(--bone);">"Cada barbeiro vê quanto ganhou. Sem você calcular nada."</div>
+      </div>
+      <div style="display:grid;grid-template-columns:80px 1fr 1fr;gap:2px;">
+        <div style="padding:20px 16px;background:#111;border-radius:0 0 0 8px;font-size:11px;color:#555;font-family:'JetBrains Mono',monospace;letter-spacing:0.5px;">Erro</div>
+        <div style="padding:20px;background:#1a1a1a;font-size:14px;color:#444;">"Ops! Ocorreu um erro inesperado. Tente novamente."</div>
+        <div style="padding:20px;background:#1a1a1a;border-radius:0 0 8px 0;font-size:14px;color:var(--bone);">"Algo deu errado. Já fomos avisados. <span style='color:var(--rust);'>Tenta de novo.</span>"</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tagline -->
+  <div style="margin-top:64px;padding:56px;background:#0d0d0d;border-radius:16px;text-align:center;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:#333;letter-spacing:3px;text-transform:uppercase;margin-bottom:24px;">Tagline oficial</div>
+    <div style="font-weight:800;font-size:clamp(28px,5vw,56px);letter-spacing:-2px;color:var(--bone);line-height:1.1;">
+      Sistemas que pensam.<br/><span style="color:var(--rust);">Donos que dormem.</span>
+    </div>
+    <div style="margin-top:24px;font-size:13px;color:#333;font-family:'JetBrains Mono',monospace;letter-spacing:1px;">
+      @raizly.tech · raizly.io
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     06. APLICAÇÕES
+════════════════════════════════════════ -->
+<section class="section section-mid" id="aplicacoes">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2 class="section-title">Aplicações<br/>de Marca</h2>
+  </div>
+
+  <div class="mockups-row">
+    <!-- App icon -->
+    <div class="mockup-card">
+      <div class="mockup-preview" style="background:#0a0a0a;">
+        <div class="appicon-wrap">
+          <svg width="96" height="96" viewBox="0 0 72 72" fill="none">
+            <rect width="72" height="72" fill="#111111"/>
+            <g transform="rotate(-22, 36, 36)">
+              <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+              <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+              <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+              <circle cx="37.5" cy="20.5" r="1.2" fill="white"/>
+              <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+              <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+              <circle cx="37.5" cy="38.5" r="1.2" fill="white"/>
+              <polygon points="36,29 33,33 39,33" fill="#111111"/>
+            </g>
+            <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+            <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+          </svg>
+        </div>
+      </div>
+      <div class="mockup-meta">
+        <div class="mockup-meta-label">App Icon</div>
+        <div class="mockup-meta-name">1024 × 1024px</div>
+      </div>
+    </div>
+
+    <!-- Pill badge -->
+    <div class="mockup-card">
+      <div class="mockup-preview" style="background:#0a0a0a;">
+        <div class="pill">
+          <svg width="22" height="22" viewBox="0 0 72 72" fill="none">
+            <g transform="rotate(-22, 36, 36)">
+              <rect x="24" y="6" width="24" height="60" rx="12" fill="white"/>
+              <circle cx="36" cy="22" r="6.5" fill="#E8430A"/>
+              <circle cx="36" cy="40" r="6.5" fill="#E8430A"/>
+            </g>
+            <polygon points="26,10 31,18 21,18" fill="white"/>
+            <polygon points="46,10 51,18 41,18" fill="white"/>
+          </svg>
+          <span>raizly</span>
+        </div>
+      </div>
+      <div class="mockup-meta">
+        <div class="mockup-meta-label">Badge / Pill</div>
+        <div class="mockup-meta-name">UI Component</div>
+      </div>
+    </div>
+
+    <!-- Favicon -->
+    <div class="mockup-card">
+      <div class="mockup-preview" style="background:#0a0a0a;flex-direction:column;gap:16px;">
+        <div class="fav-chip">
+          <svg width="16" height="16" viewBox="0 0 72 72" fill="none">
+            <rect width="72" height="72" rx="14" fill="#111111"/>
+            <g transform="rotate(-22, 36, 36)">
+              <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+              <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+              <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+              <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+              <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+            </g>
+          </svg>
+          <span class="fav-chip-url">raizly.io/dashboard</span>
+        </div>
+      </div>
+      <div class="mockup-meta">
+        <div class="mockup-meta-label">Favicon / Tab</div>
+        <div class="mockup-meta-name">32 × 32px</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Instagram identity -->
+  <div style="background:#0d0d0d;border-radius:16px;padding:48px;margin-bottom:24px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--rust);letter-spacing:2px;text-transform:uppercase;margin-bottom:32px;">Identidade Digital</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;">
+      <div>
+        <div style="font-size:11px;color:#444;margin-bottom:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;">INSTAGRAM</div>
+        <div style="font-weight:800;font-size:20px;letter-spacing:-0.5px;color:var(--bone);">@raizly.tech</div>
+        <div style="font-size:13px;color:#555;margin-top:6px;font-family:'JetBrains Mono',monospace;">display: raizly.exe</div>
+      </div>
+      <div>
+        <div style="font-size:11px;color:#444;margin-bottom:12px;font-family:'JetBrains Mono',monospace;letter-spacing:1px;">WEB</div>
+        <div style="font-weight:800;font-size:20px;letter-spacing:-0.5px;color:var(--bone);">raizly.io</div>
+        <div style="font-size:13px;color:#555;margin-top:6px;font-family:'JetBrains Mono',monospace;">PWA · Next.js · Supabase</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Story preview -->
+  <div style="background:#0d0d0d;border-radius:16px;padding:48px;">
+    <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--rust);letter-spacing:2px;text-transform:uppercase;margin-bottom:32px;">Instagram Story — Template Canônico</div>
+    <div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;">
+      <!-- Story frame -->
+      <div style="width:160px;height:284px;background:var(--ink);border-radius:12px;overflow:hidden;position:relative;flex-shrink:0;border:1px solid #222;">
+        <!-- grain -->
+        <div style="position:absolute;inset:0;background-image:url(\"data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.06'/%3E%3C/svg%3E\");pointer-events:none;z-index:10;"></div>
+        <!-- content -->
+        <div style="padding:20px;height:100%;display:flex;flex-direction:column;justify-content:space-between;position:relative;z-index:1;">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <svg width="20" height="20" viewBox="0 0 72 72" fill="none">
+              <g transform="rotate(-22, 36, 36)">
+                <rect x="24" y="6" width="24" height="60" rx="12" fill="#F0EDE6"/>
+                <circle cx="36" cy="22" r="6.5" fill="#111111"/>
+                <circle cx="36" cy="22" r="3" fill="#E8430A"/>
+                <circle cx="36" cy="40" r="6.5" fill="#111111"/>
+                <circle cx="36" cy="40" r="3" fill="#E8430A"/>
+              </g>
+              <polygon points="26,10 31,18 21,18" fill="#E8430A"/>
+              <polygon points="46,10 51,18 41,18" fill="#E8430A"/>
+            </svg>
+            <div style="width:40%;height:2px;background:#222;border-radius:100px;"></div>
+          </div>
+          <div>
+            <div style="font-family:'JetBrains Mono',monospace;font-size:6px;color:var(--rust);letter-spacing:2px;margin-bottom:6px;">SLIDE 01</div>
+            <div style="font-weight:800;font-size:18px;letter-spacing:-1px;color:var(--bone);line-height:1.1;">Sua barbearia funciona sem você?</div>
+          </div>
+        </div>
+      </div>
+      <div style="flex:1;min-width:200px;">
+        <div style="font-size:13px;color:#555;line-height:1.8;font-family:'JetBrains Mono',monospace;font-size:12px;">
+          <span style="color:var(--rust);">6 slides</span> · Progressão cinematográfica<br/>
+          <span style="color:#444;">—</span> Misterio → Dor → Editorial → Manifesto → Terminal → Reveal<br/><br/>
+          <span style="color:var(--rust);">Interações</span><br/>
+          <span style="color:#444;">—</span> Coruja segue cursor<br/>
+          <span style="color:#444;">—</span> Blink automático<br/>
+          <span style="color:#444;">—</span> Click reactions<br/>
+          <span style="color:#444;">—</span> 7s auto-advance<br/><br/>
+          <span style="color:var(--rust);">Fontes obrigatórias</span><br/>
+          <span style="color:#444;">—</span> Familjen Grotesk 800<br/>
+          <span style="color:#444;">—</span> JetBrains Mono
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <div class="footer-wordmark">raizly</div>
+      <div class="footer-tagline">IA + CRM + Automação para Barbearias</div>
+    </div>
+    <div class="footer-links">
+      <div class="footer-link">Instagram: <span>@raizly.tech</span></div>
+      <div class="footer-link">Web: <span>raizly.io</span></div>
+      <div class="footer-link">Display: <span>raizly.exe</span></div>
+    </div>
+  </div>
+
+  <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;">
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--rust);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Cores</div>
+      <div style="font-size:13px;color:#444;line-height:2;font-family:'JetBrains Mono',monospace;">
+        Bone: #F0EDE6<br/>
+        Ink: #111111<br/>
+        Rust: #E8430A
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--rust);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Tipografia</div>
+      <div style="font-size:13px;color:#444;line-height:2;font-family:'JetBrains Mono',monospace;">
+        Familjen Grotesk 800<br/>
+        Familjen Grotesk 400<br/>
+        JetBrains Mono 500
+      </div>
+    </div>
+    <div>
+      <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--rust);letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">Tom de Voz</div>
+      <div style="font-size:13px;color:#444;line-height:2;font-family:'JetBrains Mono',monospace;">
+        Cinematic<br/>
+        Direto<br/>
+        Técnico sem ser frio
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 Raizly. Todos os direitos reservados.</span>
+    <span class="footer-version">BRANDBOOK V1.0 — 2025</span>
+  </div>
+</footer>
+
+<script>
+// Nav dots active state
+const sections = ['', 'intro', 'cores', 'tipografia', 'logo', 'voz', 'aplicacoes'];
+const dots = document.querySelectorAll('.nav-dot');
+
+window.addEventListener('scroll', () => {
+  const scrollY = window.scrollY;
+  const winH = window.innerHeight;
+
+  let current = 0;
+  sections.forEach((id, i) => {
+    if (!id) return;
+    const el = document.getElementById(id);
+    if (el && el.getBoundingClientRect().top < winH * 0.5) {
+      current = i;
+    }
+  });
+
+  dots.forEach((d, i) => {
+    d.classList.toggle('active', i === current);
+  });
+});
+</script>
+</body>
+</html>

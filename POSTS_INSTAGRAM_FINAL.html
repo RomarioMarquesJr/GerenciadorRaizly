@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Raizly Instagram Posts - Prontos para Publicar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --rust: #E8430A;
+            --bone: #F0EDE6;
+            --ink: #111111;
+            --mid: #888888;
+            --dim: #333333;
+        }
+
+        body {
+            background: var(--ink);
+            color: var(--bone);
+            font-family: 'Familjen Grotesk', sans-serif;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--rust);
+            margin-bottom: 10px;
+            font-size: 42px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: var(--mid);
+            margin-bottom: 40px;
+            font-size: 16px;
+        }
+
+        .info-banner {
+            background: rgba(232, 67, 10, 0.1);
+            border-left: 4px solid var(--rust);
+            padding: 20px;
+            margin-bottom: 40px;
+            border-radius: 6px;
+        }
+
+        .info-banner p {
+            color: var(--bone);
+            line-height: 1.6;
+        }
+
+        .posts-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .post-wrapper {
+            position: relative;
+        }
+
+        .post-label {
+            color: var(--mid);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .post {
+            width: 100%;
+            aspect-ratio: 1080/1350;
+            border: 2px solid var(--dim);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .post:hover {
+            transform: scale(1.02);
+        }
+
+        /* Monday S1 - 5 slides carousel preview */
+        .post-monday-s1 {
+            background: linear-gradient(135deg, var(--rust) 0%, #d63a07 100%);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 30px;
+            font-size: 14px;
+        }
+
+        .post-monday-s1 h2 {
+            font-size: 42px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 30px;
+        }
+
+        .post-monday-s1 p {
+            font-size: 22px;
+            margin-bottom: 20px;
+        }
+
+        .post-logo {
+            position: absolute;
+            bottom: 15px;
+            right: 15px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 9px;
+            opacity: 0.5;
+        }
+
+        .carousel-indicator {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: rgba(0,0,0,0.3);
+            color: var(--bone);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Tuesday S1 - Feed Long */
+        .post-tuesday-s1 {
+            background: linear-gradient(to bottom, var(--ink) 0%, var(--dim) 100%);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .post-tuesday-s1 .image-area {
+            height: 60%;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--mid);
+            font-size: 13px;
+            border-bottom: 3px solid var(--rust);
+        }
+
+        .post-tuesday-s1 .content {
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            flex-grow: 1;
+        }
+
+        .post-tuesday-s1 h2 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+
+        .post-tuesday-s1 p {
+            font-size: 13px;
+            line-height: 1.4;
+        }
+
+        /* Wednesday S1 - Transformation */
+        .post-wednesday-s1 {
+            background: linear-gradient(to bottom, var(--ink) 0%, #1a1a1a 100%);
+            color: var(--bone);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-wednesday-s1 .section {
+            margin: 15px 0;
+        }
+
+        .post-wednesday-s1 h3 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--rust);
+            margin-bottom: 15px;
+        }
+
+        .post-wednesday-s1 .items {
+            font-size: 13px;
+            line-height: 1.6;
+            background: rgba(51, 51, 51, 0.5);
+            padding: 12px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .post-wednesday-s1 .arrow {
+            font-size: 28px;
+            margin: 10px 0;
+            color: var(--rust);
+        }
+
+        /* Thursday S1 - Numbers */
+        .post-thursday-s1 {
+            background: linear-gradient(to bottom, var(--ink) 0%, #1a1a1a 100%);
+            color: var(--bone);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-thursday-s1 .stat {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--rust);
+            font-size: 60px;
+            font-weight: 700;
+            line-height: 1;
+            margin: 10px 0;
+        }
+
+        .post-thursday-s1 h3 {
+            font-size: 16px;
+            color: var(--bone);
+            margin: 10px 0;
+        }
+
+        .post-thursday-s1 .impact {
+            font-size: 12px;
+            color: var(--mid);
+            line-height: 1.5;
+        }
+
+        /* Friday S1 - Control */
+        .post-friday-s1 {
+            background: var(--rust);
+            color: var(--bone);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-friday-s1 h2 {
+            font-size: 38px;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 25px;
+        }
+
+        .post-friday-s1 p {
+            font-size: 18px;
+        }
+
+        /* Monday S2 - Deep Dive */
+        .post-monday-s2 {
+            background: linear-gradient(to bottom, var(--ink) 0%, var(--dim) 100%);
+            color: var(--bone);
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+        }
+
+        .post-monday-s2 .image-area {
+            height: 55%;
+            background: linear-gradient(135deg, #2a2a2a 0%, #1a1a1a 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--mid);
+            font-size: 13px;
+            border-bottom: 3px solid var(--rust);
+        }
+
+        .post-monday-s2 .content {
+            padding: 20px;
+            flex-grow: 1;
+        }
+
+        .post-monday-s2 h2 {
+            font-size: 16px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .post-monday-s2 p {
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        /* Tuesday S2 - Social Proof */
+        .post-tuesday-s2 {
+            background: var(--bone);
+            color: var(--ink);
+            padding: 40px 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-tuesday-s2 .quote {
+            font-size: 26px;
+            font-weight: 700;
+            color: var(--rust);
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .post-tuesday-s2 .results {
+            font-size: 14px;
+            line-height: 1.8;
+            margin: 15px 0;
+        }
+
+        .post-tuesday-s2 .author {
+            font-size: 12px;
+            color: var(--mid);
+            margin-top: 15px;
+        }
+
+        /* Wednesday S2 - Transformation */
+        .post-wednesday-s2 {
+            background: linear-gradient(to bottom, var(--ink) 0%, #1a1a1a 100%);
+            color: var(--bone);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-wednesday-s2 .before {
+            color: var(--rust);
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 15px;
+        }
+
+        .post-wednesday-s2 .before-items {
+            font-size: 12px;
+            line-height: 1.6;
+            background: rgba(51, 51, 51, 0.5);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+
+        .post-wednesday-s2 .arrow {
+            font-size: 24px;
+            margin: 15px 0;
+            color: var(--rust);
+        }
+
+        .post-wednesday-s2 .after {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--bone);
+        }
+
+        /* Thursday S2 - Statistics */
+        .post-thursday-s2 {
+            background: linear-gradient(to bottom, var(--ink) 0%, #1a1a1a 100%);
+            color: var(--bone);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-thursday-s2 .stat {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--rust);
+            font-size: 60px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .post-thursday-s2 .impact {
+            font-size: 13px;
+            line-height: 1.6;
+            color: var(--bone);
+        }
+
+        /* Friday S2 - ROI */
+        .post-friday-s2 {
+            background: linear-gradient(135deg, var(--ink) 0%, #1a1a1a 100%);
+            color: var(--bone);
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            text-align: center;
+        }
+
+        .post-friday-s2 .question {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .post-friday-s2 .number {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--rust);
+            font-size: 56px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .post-friday-s2 .label {
+            font-size: 14px;
+            color: var(--mid);
+            margin: 5px 0;
+        }
+
+        .post-friday-s2 .math {
+            font-size: 12px;
+            color: var(--bone);
+            line-height: 1.6;
+            margin-top: 15px;
+        }
+
+        /* Instructions */
+        .instructions {
+            background: var(--dim);
+            padding: 30px;
+            border-radius: 8px;
+            margin-top: 60px;
+            line-height: 1.8;
+        }
+
+        .instructions h2 {
+            color: var(--rust);
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+
+        .instructions p {
+            color: var(--bone);
+            margin-bottom: 15px;
+        }
+
+        .instructions ol {
+            color: var(--bone);
+            padding-left: 20px;
+        }
+
+        .instructions li {
+            margin-bottom: 10px;
+        }
+
+        .step-code {
+            background: var(--ink);
+            border-left: 3px solid var(--rust);
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 13px;
+            overflow-x: auto;
+        }
+
+        .week-header {
+            font-size: 28px;
+            color: var(--rust);
+            margin-bottom: 20px;
+            margin-top: 40px;
+            text-transform: uppercase;
+            border-bottom: 2px solid var(--rust);
+            padding-bottom: 10px;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid var(--dim);
+            color: var(--mid);
+            font-size: 13px;
+        }
+
+        .download-btn {
+            display: inline-block;
+            background: var(--rust);
+            color: var(--bone);
+            padding: 15px 30px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 700;
+            margin-top: 20px;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+        }
+
+        .download-btn:hover {
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📱 Raizly Instagram Posts</h1>
+        <p class="subtitle">10 Posts Prontos para Publicar - Sistema Final Otimizado</p>
+
+        <div class="info-banner">
+            <p><strong>ℹ️ Como usar:</strong> Cada card abaixo é um post pronto. Clique em um post, tire uma screenshot (Print Screen ou Cmd+Shift+4 no Mac), e publique no Instagram. Cores e fonts já estão corretos!</p>
+        </div>
+
+        <!-- WEEK 1 -->
+        <div class="week-header">📅 SEMANA 1</div>
+
+        <div class="posts-container">
+            <!-- Monday S1 -->
+            <div class="post-wrapper">
+                <div class="post-label">MON • Agendamento Problem • Carrossel 5 slides</div>
+                <div class="post post-monday-s1">
+                    <div class="carousel-indicator">Slide 1 / 5</div>
+                    <h2>De cada 10 clientes que chegam na porta da sua barbearia...<br><br>...quantos REALMENTE chegam?</h2>
+                    <p>4 em cada 10 simplesmente somem.<br>Você sabia?</p>
+                    <div class="post-logo">HEADLY TECH</div>
+                </div>
+            </div>
+
+            <!-- Tuesday S1 -->
+            <div class="post-wrapper">
+                <div class="post-label">TUE • Dados Solution • Feed Long</div>
+                <div class="post post-tuesday-s1">
+                    <div class="image-area">🖼️ Imagem: Barbeiro + Dashboard Raizly</div>
+                    <div class="content">
+                        <h2>"Eu não sabia aonde meu dinheiro estava indo."</h2>
+                        <p>Em uma semana, João tinha visibilidade total. Descobriu que lucro real era R$8.500, não R$15.000. Com dados, fez 3 mudanças e lucro subiu para R$11.200 em 60 dias.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Wednesday S1 -->
+            <div class="post-wrapper">
+                <div class="post-label">WED • Agendamento Transformation • Carrossel 4 slides</div>
+                <div class="post post-wednesday-s1">
+                    <div class="section">
+                        <h3>ANTES ❌</h3>
+                        <div class="items">
+                            • Agenda no WhatsApp<br>
+                            • Cliente não confirma<br>
+                            • Horário vazio<br>
+                            • Dinheiro perdido
+                        </div>
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="section">
+                        <h3>DEPOIS ✅</h3>
+                        <div class="items">
+                            • Digital organizado<br>
+                            • Cliente confirma<br>
+                            • 95% confirmação<br>
+                            • Lucro aumenta
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thursday S1 -->
+            <div class="post-wrapper">
+                <div class="post-label">THU • Dados Urgency • Carrossel 5 slides</div>
+                <div class="post post-thursday-s1">
+                    <div class="stat">R$12.000</div>
+                    <h3>Perdidos por mês</h3>
+                    <div class="impact">
+                        40% de clientes não confirmam<br>
+                        20 × R$150 = R$3.000/semana<br>
+                        <br>
+                        Você está deixando de ganhar isso
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friday S1 -->
+            <div class="post-wrapper">
+                <div class="post-label">FRI • Controle Teaser • Carrossel 4 slides</div>
+                <div class="post post-friday-s1">
+                    <h2>Você sabe quanto LUCROU na semana passada?</h2>
+                    <p>(Com certeza? Ou é palpite?)</p>
+                    <p style="margin-top: 30px; font-size: 14px; color: rgba(240, 237, 230, 0.7);">A maioria não sabe. E está custando até R$8k/mês</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- WEEK 2 -->
+        <div class="week-header">📅 SEMANA 2</div>
+
+        <div class="posts-container">
+            <!-- Monday S2 -->
+            <div class="post-wrapper">
+                <div class="post-label">MON • Controle Deep Dive • Feed Long</div>
+                <div class="post post-monday-s2">
+                    <div class="image-area">🖼️ Imagem: Dono com Planilha/Computador</div>
+                    <div class="content">
+                        <h2>"Meu fluxo de caixa era um mistério"</h2>
+                        <p>Carlos descobriu que tinha R$2.100 em crediário aberto + R$500/mês em gastos desnecessários. Com dados, aumentou lucro de R$8.500 para R$11.200 em 90 dias.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tuesday S2 -->
+            <div class="post-wrapper">
+                <div class="post-label">TUE • Agendamento Social Proof • Carrossel 4 slides</div>
+                <div class="post post-tuesday-s2">
+                    <div class="quote">"Raizly mudou minha barbearia"</div>
+                    <div class="results">
+                        ✓ 95% confirmação<br>
+                        ✓ Faturamento +30%<br>
+                        ✓ 0 stress
+                    </div>
+                    <div class="author">- Bruno, Barbearia Elite SP</div>
+                </div>
+            </div>
+
+            <!-- Wednesday S2 -->
+            <div class="post-wrapper">
+                <div class="post-label">WED • Controle Transformation • Carrossel 4 slides</div>
+                <div class="post post-wednesday-s2">
+                    <div class="before">ANTES ❌</div>
+                    <div class="before-items">
+                        • Não sabe ganho<br>
+                        • Não sabe gastos<br>
+                        • Estresse constante
+                    </div>
+                    <div class="arrow">→</div>
+                    <div class="after">DEPOIS ✅</div>
+                    <div class="before-items" style="margin-top: 15px;">
+                        • Clareza total<br>
+                        • Paz mental<br>
+                        • Crescimento possível
+                    </div>
+                </div>
+            </div>
+
+            <!-- Thursday S2 -->
+            <div class="post-wrapper">
+                <div class="post-label">THU • Agendamento Statistics • Carrossel 3 slides</div>
+                <div class="post post-thursday-s2">
+                    <div class="stat">40%</div>
+                    <h3>Taxa de não-confirmação</h3>
+                    <div class="impact">
+                        Se tem 50 agendamentos/semana:<br>
+                        20 não confirmam<br>
+                        = R$3.000 perdido/semana<br>
+                        = R$12.000/mês
+                    </div>
+                </div>
+            </div>
+
+            <!-- Friday S2 -->
+            <div class="post-wrapper">
+                <div class="post-label">FRI • Dados ROI • Carrossel 4 slides</div>
+                <div class="post post-friday-s2">
+                    <div class="question">Vale a pena?</div>
+                    <div class="number">1.600%</div>
+                    <div class="label">Retorno ao mês</div>
+                    <div class="math">
+                        R$8.000 ganho<br>
+                        R$500 custo<br>
+                        = Lucro puro
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="instructions">
+            <h2>🚀 Como Publicar Esses Posts</h2>
+            <p><strong>Opção 1: Screenshot (Recomendado - 2 minutos por post)</strong></p>
+            <ol>
+                <li><strong>Clique em um post</strong> acima</li>
+                <li><strong>Tire uma screenshot:</strong>
+                    <div class="step-code">
+                        Windows: Print Screen<br>
+                        Mac: Cmd + Shift + 4 (selecione o post)
+                    </div>
+                </li>
+                <li><strong>Abra seu Instagram</strong> (app ou web)</li>
+                <li><strong>Nova postagem</strong> → Selecione a imagem</li>
+                <li><strong>Copie a legenda</strong> de "POSTS_FINAL_OTIMIZADOS.md"</li>
+                <li><strong>Publique!</strong></li>
+            </ol>
+
+            <p style="margin-top: 30px;"><strong>Opção 2: Exportar HTML como PDF (Melhor qualidade)</strong></p>
+            <ol>
+                <li>Abra este arquivo no Chrome</li>
+                <li>Clique Print (Ctrl+P ou Cmd+P)</li>
+                <li>Salve como PDF</li>
+                <li>Abra o PDF, tire screenshots dos posts</li>
+            </ol>
+
+            <p style="margin-top: 30px;"><strong>Tempo total:</strong> ~30 minutos (10 posts × 2-3 min each)</p>
+
+            <a href="#" class="download-btn" onclick="window.print(); return false;">📥 Abrir Para Screenshot</a>
+        </div>
+
+        <footer>
+            <p>Raizly Instagram Content System - Final Otimizado 2.0</p>
+            <p style="margin-top: 10px; color: var(--dim);">Design System + Copy Framework | HEADLY TECH</p>
+        </footer>
+    </div>
+</body>
+</html>
