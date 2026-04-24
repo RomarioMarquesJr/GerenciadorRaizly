@@ -761,8 +761,6 @@
     POSTS.forEach(function(p){ updateCardUI(p.id); });
     updateFilterCounts();
   }
-
-  init();
   </script>
 
   <script>
@@ -1000,6 +998,8 @@
     document.getElementById('count-posted').textContent = postedCount;
     document.getElementById('count-pending').textContent = total - postedCount;
   }
+
+  init();
   </script>
 
 </body>
