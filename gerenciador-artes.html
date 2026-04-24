@@ -7,6 +7,8 @@
   <link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-database-compat.js"></script>
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root { --rust:#E8430A; --bone:#F0EDE6; --ink:#111111; --mid:#888888; --dim:#333333; --card-bg:#1a1a1a; --green:#4ade80; }
@@ -924,22 +926,40 @@
   </script>
 
   <script>
-  /* POSTED TRACKING */
-  var STORAGE_KEY = 'raizly_posted_v1';
+  /* POSTED TRACKING — Firebase Realtime Database */
+  var FIREBASE_CONFIG = {
+    apiKey:            "COLE_AQUI",
+    authDomain:        "COLE_AQUI",
+    databaseURL:       "COLE_AQUI",
+    projectId:         "COLE_AQUI",
+    storageBucket:     "COLE_AQUI",
+    messagingSenderId: "COLE_AQUI",
+    appId:             "COLE_AQUI"
+  };
+
+  firebase.initializeApp(FIREBASE_CONFIG);
+  var _db        = firebase.database();
+  var _postedRef = _db.ref('raizly_posted');
+  var _posted    = {};
+
+  // Listener em tempo real — qualquer dispositivo que marcar atualiza todos
+  _postedRef.on('value', function(snapshot) {
+    _posted = snapshot.val() || {};
+    POSTS.forEach(function(p) { updateCardUI(p.id); });
+    updateFilterCounts();
+    applyFilter();
+  });
 
   function getPosted() {
-    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); }
-    catch(e) { return {}; }
+    return _posted;
   }
 
   function togglePosted(postId) {
-    var posted = getPosted();
-    if (posted[postId]) { delete posted[postId]; }
-    else { posted[postId] = new Date().toISOString(); }
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(posted));
-    updateCardUI(postId);
-    updateFilterCounts();
-    applyFilter();
+    if (_posted[postId]) {
+      _postedRef.child(postId).remove();
+    } else {
+      _postedRef.child(postId).set(new Date().toISOString());
+    }
   }
 
   function updateCardUI(postId) {
