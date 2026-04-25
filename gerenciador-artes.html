@@ -140,6 +140,90 @@
     .ind-dl:hover { background: var(--rust); }
     .modal-close { position: fixed; top: 16px; right: 20px; font-size: 24px; color: rgba(255,255,255,0.4); cursor: pointer; z-index: 201; line-height: 1; transition: color .2s; }
     .modal-close:hover { color: white; }
+
+    /* ── SECTION NAV ── */
+    .section-nav { display:flex; gap:0; background:rgba(17,17,17,0.9); border-bottom:2px solid var(--dim); padding:0 40px; }
+    .snav-btn { display:flex; align-items:center; gap:8px; background:transparent; color:var(--mid); border:none; border-bottom:2px solid transparent; margin-bottom:-2px; font-family:'Familjen Grotesk',sans-serif; font-size:14px; font-weight:700; cursor:pointer; padding:16px 20px; transition:color .2s,border-color .2s; }
+    .snav-btn:hover { color:var(--bone); }
+    .snav-btn.active { color:var(--bone); border-bottom-color:var(--rust); }
+    .snav-badge { font-family:'JetBrains Mono',monospace; font-size:10px; background:rgba(255,255,255,0.08); border-radius:100px; padding:1px 8px; }
+    .snav-btn.active .snav-badge { background:rgba(232,67,10,0.2); color:var(--rust); }
+
+    /* ── STORY CARD ── */
+    .stories-section { padding:36px 40px 52px; }
+    .stories-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:18px; }
+    .story-card { background:var(--card-bg); border-radius:12px; overflow:hidden; border:1px solid rgba(255,255,255,0.05); transition:transform .2s,box-shadow .2s,border-color .3s; cursor:pointer; }
+    .story-card:hover { transform:translateY(-3px); box-shadow:0 20px 50px rgba(0,0,0,0.5); }
+    .story-card.posted { border-color:rgba(74,222,128,0.3); }
+    .story-thumb-wrap { width:100%; aspect-ratio:1080/1920; overflow:hidden; position:relative; }
+    .story-thumb-wrap:hover .st-overlay { opacity:1; }
+    .st-overlay { position:absolute; inset:0; background:rgba(0,0,0,0.5); display:flex; align-items:center; justify-content:center; opacity:0; transition:opacity .2s; font-size:12px; font-weight:700; color:white; }
+    .story-card-foot { padding:10px 12px 12px; }
+    .story-card-title { font-size:11px; font-weight:700; color:var(--bone); margin-bottom:8px; line-height:1.3; }
+    .story-mark-row { padding-top:8px; border-top:1px solid rgba(255,255,255,0.05); }
+    .story-btn-mark { width:100%; background:rgba(255,255,255,0.04); color:var(--mid); border:1px solid rgba(255,255,255,0.08); border-radius:8px; padding:7px 8px; font-family:'Familjen Grotesk',sans-serif; font-size:11px; font-weight:600; cursor:pointer; transition:all .2s; text-align:center; }
+    .story-btn-mark:hover { background:rgba(74,222,128,0.08); color:var(--green); border-color:rgba(74,222,128,0.2); }
+    .story-btn-mark.marked { background:rgba(74,222,128,0.1); color:var(--green); border-color:rgba(74,222,128,0.25); }
+
+    /* ── STORY CANVAS (preview thumbnail) ── */
+    .story-canvas { width:100%; height:100%; display:flex; flex-direction:column; font-family:'Familjen Grotesk',sans-serif; position:relative; overflow:hidden; }
+    .story-canvas.bg-rust { background:linear-gradient(160deg,#E8430A 0%,#c43208 100%); color:var(--bone); }
+    .story-canvas.bg-ink  { background:linear-gradient(to bottom,#111111 0%,#1a1a1a 100%); color:var(--bone); }
+    .story-canvas.bg-bone { background:var(--bone); color:var(--ink); }
+    .sc-top { display:flex; justify-content:space-between; align-items:center; padding:clamp(5px,4%,10px) clamp(6px,5%,12px); flex-shrink:0; }
+    .sc-tag { font-family:'JetBrains Mono',monospace; font-size:clamp(5px,2.5%,8px); text-transform:uppercase; letter-spacing:1px; opacity:.5; }
+    .sc-num { font-family:'JetBrains Mono',monospace; font-size:clamp(5px,2.5%,8px); opacity:.35; }
+    .sc-body { flex:1; display:flex; flex-direction:column; justify-content:center; padding:clamp(4px,3%,8px) clamp(6px,5%,12px); gap:clamp(4px,3%,8px); }
+    .sc-icon { font-size:clamp(18px,12%,28px); line-height:1; }
+    .sc-headline { font-weight:800; font-size:clamp(8px,5%,13px); line-height:1.2; }
+    .sc-sub { font-size:clamp(6px,3.5%,10px); line-height:1.4; opacity:.75; }
+    .sc-cta-pill { font-family:'JetBrains Mono',monospace; font-size:clamp(5px,3%,8px); background:rgba(0,0,0,0.2); padding:clamp(2px,1.5%,5px) clamp(4px,3%,9px); border-radius:3px; display:inline-block; margin-top:clamp(2px,1.5%,5px); }
+    .bg-bone .sc-cta-pill { background:rgba(17,17,17,0.1); color:var(--ink); }
+    .sc-foot { display:flex; justify-content:space-between; align-items:center; padding:clamp(4px,3%,8px) clamp(6px,5%,12px); border-top:1px solid rgba(255,255,255,0.08); flex-shrink:0; }
+    .bg-bone .sc-foot { border-top-color:rgba(17,17,17,0.08); }
+    .sc-logo-wm { font-weight:800; font-size:clamp(5px,3%,9px); opacity:.35; letter-spacing:-.3px; }
+    .sc-week-badge { font-family:'JetBrains Mono',monospace; font-size:clamp(4px,2.5%,7px); text-transform:uppercase; letter-spacing:.5px; opacity:.4; }
+
+    /* ── BOLD ANIMATIONS ── */
+    @keyframes stIconBounce { 0%{opacity:0;transform:scale(0) rotate(-15deg)} 60%{opacity:1;transform:scale(1.25) rotate(5deg)} 100%{opacity:1;transform:scale(1) rotate(0)} }
+    @keyframes stPunchIn    { from{opacity:0;transform:scale(1.3)} to{opacity:1;transform:scale(1)} }
+    @keyframes stSlideRight { from{opacity:0;transform:translateX(20px)} to{opacity:1;transform:translateX(0)} }
+    @keyframes stBarFill    { from{width:0} to{width:100%} }
+    .sc-progress { height:2px; background:rgba(255,255,255,0.12); flex-shrink:0; margin:0 clamp(6px,5%,12px); border-radius:2px; }
+    .bg-bone .sc-progress { background:rgba(17,17,17,0.1); }
+    .sc-progress-fill { height:100%; width:0; border-radius:2px; background:white; }
+    .bg-bone .sc-progress-fill { background:var(--rust); }
+    .story-playing .sc-icon         { animation:stIconBounce .45s .1s both; }
+    .story-playing .sc-headline     { animation:stPunchIn .35s .4s both; }
+    .story-playing .sc-sub          { animation:stSlideRight .3s .65s both; }
+    .story-playing .sc-cta-pill     { animation:stPunchIn .3s .85s both; }
+    .story-playing .sc-progress-fill { animation:stBarFill 5s .1s both linear; }
+
+    /* ── STORIES FILTER BAR ── */
+    .stories-filter-bar { display:flex; gap:0; padding:0 40px; border-bottom:1px solid var(--dim); background:rgba(17,17,17,0.5); }
+
+    /* ── STORY PLAYER MODAL ── */
+    #story-player { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.97); align-items:center; justify-content:center; gap:clamp(8px,2vw,28px); padding:16px; }
+    #story-player.open { display:flex; }
+    .sp-arrow { width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:20px; color:white; cursor:pointer; flex-shrink:0; transition:background .2s; user-select:none; }
+    .sp-arrow:hover { background:rgba(255,255,255,0.14); }
+    .sp-arrow.hidden { visibility:hidden; }
+    .sp-center { display:flex; flex-direction:column; align-items:center; gap:12px; }
+    .sp-info { font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--mid); text-align:center; }
+    .sp-frame-wrap { border-radius:14px; overflow:hidden; box-shadow:0 32px 100px rgba(0,0,0,0.9); position:relative; flex-shrink:0; }
+    .sp-story-inner { position:absolute; top:0; left:0; width:1080px; height:1920px; transform-origin:top left; }
+    .sp-actions { display:flex; gap:8px; flex-wrap:wrap; justify-content:center; }
+    .sp-btn { border:none; border-radius:9px; padding:10px 18px; font-family:'Familjen Grotesk',sans-serif; font-size:13px; font-weight:600; cursor:pointer; transition:all .2s; }
+    .sp-btn-replay { background:#2a2a2a; color:var(--bone); }
+    .sp-btn-replay:hover { background:#333; }
+    .sp-btn-mark-player { background:rgba(74,222,128,0.08); color:var(--green); border:1px solid rgba(74,222,128,0.2) !important; }
+    .sp-btn-mark-player.marked { background:rgba(74,222,128,0.18); }
+    .sp-close { position:fixed; top:14px; right:18px; font-size:24px; color:rgba(255,255,255,0.4); cursor:pointer; z-index:301; transition:color .2s; line-height:1; }
+    .sp-close:hover { color:white; }
+    .stories-week-header { display:flex; align-items:center; gap:12px; margin-bottom:8px; }
+    .stories-week-section { padding:32px 40px 48px; }
+    .stories-week-section + .stories-week-section { padding-top:0; }
+    .stories-week-empty { display:none; font-size:13px; color:var(--mid); padding:20px 0; font-family:'JetBrains Mono',monospace; }
   </style>
 </head>
 <body>
@@ -161,9 +245,20 @@
       </svg>
       <span class="h-brand-wm">raizly</span>
     </div>
-    <div class="h-meta">20 artes · 4 semanas · Instagram 1080×1350px</div>
+    <div class="h-meta" id="h-meta-text">20 artes · 4 semanas · Instagram 1080×1350px</div>
   </header>
 
+  <nav class="section-nav">
+    <button class="snav-btn active" onclick="switchSection('artes')" id="snav-artes">
+      ▦ Carrosséis <span class="snav-badge" id="snav-badge-artes">20</span>
+    </button>
+    <button class="snav-btn" onclick="switchSection('stories')" id="snav-stories">
+      ▷ Stories <span class="snav-badge" id="snav-badge-stories">30</span>
+    </button>
+  </nav>
+
+  <!-- ═══ SEÇÃO CARROSSÉIS ═══ -->
+  <div id="view-artes">
   <div class="hero">
     <h1>Gerenciador de <em>Artes</em></h1>
     <p>Clique para preview. Baixe em PNG 1080×1350px ou pacote ZIP. Marque o que já foi postado.</p>
@@ -211,6 +306,65 @@
     <p><strong>raizly</strong> · raizly.tech · Sistema de gestão para barbearias<br>
     Conteúdo baseado nas funcionalidades reais do produto</p>
   </footer>
+  </div><!-- /view-artes -->
+
+  <!-- ═══ SEÇÃO STORIES ═══ -->
+  <div id="view-stories" style="display:none">
+    <div class="hero">
+      <h1>Stories <em>Animados</em></h1>
+      <p>30 stories 1080×1920px com animação bold. Abra em tela cheia, grave com a gravação nativa do celular e poste.</p>
+      <div class="notice"><span>▷</span><span>Toque no story para abrir o player em tela cheia e ver a animação em alta resolução.</span></div>
+    </div>
+    <div class="stories-filter-bar">
+      <button class="filter-btn active" onclick="setStoriesFilter('all')" id="sf-all">Todos <span class="filter-count" id="sc-all">30</span></button>
+      <button class="filter-btn" onclick="setStoriesFilter('pending')" id="sf-pending">Pendentes <span class="filter-count" id="sc-pending">30</span></button>
+      <button class="filter-btn f-posted" onclick="setStoriesFilter('posted')" id="sf-posted">Postados <span class="filter-count" id="sc-posted">0</span></button>
+    </div>
+    <div class="stories-week-section">
+      <div class="stories-week-header"><span class="week-badge">Semana 1</span><span class="week-title">7 stories</span></div>
+      <hr class="week-divider">
+      <div class="stories-grid" id="sgrid-1"></div>
+      <p class="stories-week-empty" id="sempty-1">Nenhum story com esse filtro.</p>
+    </div>
+    <div class="stories-week-section">
+      <div class="stories-week-header"><span class="week-badge">Semana 2</span><span class="week-title">8 stories</span></div>
+      <hr class="week-divider">
+      <div class="stories-grid" id="sgrid-2"></div>
+      <p class="stories-week-empty" id="sempty-2">Nenhum story com esse filtro.</p>
+    </div>
+    <div class="stories-week-section">
+      <div class="stories-week-header"><span class="week-badge">Semana 3</span><span class="week-title">8 stories</span></div>
+      <hr class="week-divider">
+      <div class="stories-grid" id="sgrid-3"></div>
+      <p class="stories-week-empty" id="sempty-3">Nenhum story com esse filtro.</p>
+    </div>
+    <div class="stories-week-section">
+      <div class="stories-week-header"><span class="week-badge">Semana 4</span><span class="week-title">7 stories</span></div>
+      <hr class="week-divider">
+      <div class="stories-grid" id="sgrid-4"></div>
+      <p class="stories-week-empty" id="sempty-4">Nenhum story com esse filtro.</p>
+    </div>
+    <footer class="page-footer">
+      <p><strong>raizly</strong> · raizly.tech · Stories 1080×1920px para Instagram</p>
+    </footer>
+  </div><!-- /view-stories -->
+
+  <!-- Story Player -->
+  <div id="story-player">
+    <span class="sp-close" onclick="closeStoryPlayer()">✕</span>
+    <button class="sp-arrow" id="sp-prev" onclick="spNav(-1)">‹</button>
+    <div class="sp-center">
+      <div class="sp-info" id="sp-info"></div>
+      <div class="sp-frame-wrap" id="sp-frame-wrap">
+        <div class="sp-story-inner" id="sp-story-inner"></div>
+      </div>
+      <div class="sp-actions">
+        <button class="sp-btn sp-btn-replay" onclick="spReplay()">↺ Rever</button>
+        <button class="sp-btn sp-btn-mark-player" id="sp-btn-mark" onclick="spToggleMark()">Marcar como postado</button>
+      </div>
+    </div>
+    <button class="sp-arrow" id="sp-next" onclick="spNav(1)">›</button>
+  </div>
 
   <div id="modal">
     <span class="modal-close" onclick="closeModal()">✕</span>
@@ -668,6 +822,44 @@
     }
 
   ];
+
+  /* ── 30 STORIES ── */
+  var STORIES = [
+    // SEMANA 1 (7) — reforço carrosséis
+    { id:'st-1-1', week:1, title:'Você ainda agenda por WhatsApp?', tag:'agendamento', bg:'rust', icon:'📅', headline:'Você ainda agenda por WhatsApp?', sub:'É difícil de controlar, fácil de perder. Tem um jeito melhor.', cta:'raizly.tech' },
+    { id:'st-1-2', week:1, title:'Sua agenda está na cabeça?', tag:'agenda', bg:'ink', icon:'📋', headline:'Sua agenda está no celular pessoal ou na cabeça?', sub:'Isso não é agenda. É improviso.', cta:'raizly.tech' },
+    { id:'st-1-3', week:1, title:'Você sabe quanto faturou?', tag:'dashboard', bg:'bone', icon:'📊', headline:'Quanto sua barbearia faturou essa semana?', sub:'Se precisou pensar, o problema está respondido.', cta:'raizly.tech' },
+    { id:'st-1-4', week:1, title:'Quanto entrou e saiu esse mês?', tag:'financeiro', bg:'rust', icon:'💰', headline:'Quanto entrou e saiu esse mês?', sub:'Se você não sabe agora, descobre tarde demais.', cta:'raizly.tech' },
+    { id:'st-1-5', week:1, title:'Seu cliente sumiu?', tag:'comunicação', bg:'ink', icon:'💬', headline:'Seu cliente marcou e você não sabe se vem.', sub:'Lembrete automático resolve. Você só atende.', cta:'raizly.tech' },
+    { id:'st-1-6', week:1, title:'Quanto cada barbeiro gerou?', tag:'equipe', bg:'rust', icon:'✂️', headline:'Quanto cada barbeiro gerou esse mês?', sub:'Se não sabe de cabeça, não tem gestão de equipe.', cta:'raizly.tech' },
+    { id:'st-1-7', week:1, title:'Você monta planilha toda semana?', tag:'relatórios', bg:'bone', icon:'📈', headline:'Você monta planilha toda semana?', sub:'Você deveria estar crescendo, não montando tabela.', cta:'raizly.tech' },
+    // SEMANA 2 (8) — mix
+    { id:'st-2-1', week:2, title:'Alguém deve e você não lembra?', tag:'crediário', bg:'rust', icon:'💳', headline:'Alguém deve e você já não lembra quanto?', sub:'Caderninho rasga. Dívida não.', cta:'raizly.tech' },
+    { id:'st-2-2', week:2, title:'Sua barbearia funciona sem você?', tag:'automação', bg:'ink', icon:'⚡', headline:'Sua barbearia funciona quando você não está lá?', sub:'Se tudo para quando você para, você tem emprego, não negócio.', cta:'raizly.tech' },
+    { id:'st-2-3', week:2, title:'Barbearia organizada não é sorte.', tag:'raizly', bg:'bone', icon:'💈', headline:'Barbearia organizada não é sorte.', sub:'É sistema. Feito do zero para barbearia.', cta:'raizly.tech' },
+    { id:'st-2-4', week:2, title:'3 sinais que você precisa de sistema', tag:'dica', bg:'rust', icon:'🔎', headline:'3 sinais que sua barbearia precisa de sistema:', sub:'① Agenda no WhatsApp  ② Financeiro no chute  ③ Você não sabe quem sumiu.', cta:'raizly.tech' },
+    { id:'st-2-5', week:2, title:'Barbearia de sucesso não improvisa.', tag:'gestão', bg:'ink', icon:'🏆', headline:'Barbearia de sucesso não improvisa.', sub:'Tem processo. Tem dado. Tem controle.', cta:'raizly.tech' },
+    { id:'st-2-6', week:2, title:'15 dias grátis. Sem compromisso.', tag:'oferta', bg:'rust', icon:'🎯', headline:'15 dias grátis.', sub:'Sem cobrar nada durante o teste. Configure hoje, receba agendamentos amanhã.', cta:'raizly.tech' },
+    { id:'st-2-7', week:2, title:'No-show custa dinheiro.', tag:'no-show', bg:'bone', icon:'🚫', headline:'No-show custa dinheiro.', sub:'Lembrete automático reduz falta. Horário vazio é receita que não entrou.', cta:'raizly.tech' },
+    { id:'st-2-8', week:2, title:'Dono com sistema ganha mais tempo.', tag:'tempo', bg:'ink', icon:'⏱️', headline:'Dono que usa sistema ganha tempo de volta.', sub:'Menos tarefa operacional. Mais decisão estratégica.', cta:'raizly.tech' },
+    // SEMANA 3 (8) — mix
+    { id:'st-3-1', week:3, title:'Seu cliente voltou esse mês?', tag:'fidelização', bg:'rust', icon:'🔁', headline:'Seu cliente veio mês passado. E esse mês?', sub:'A maioria dos donos não sabe. O Raizly sabe.', cta:'raizly.tech' },
+    { id:'st-3-2', week:3, title:'Cliente marcou. Não apareceu.', tag:'no-show', bg:'ink', icon:'📵', headline:'Cliente marcou. Não apareceu.', sub:'Acontece toda semana. Dá para evitar.', cta:'raizly.tech' },
+    { id:'st-3-3', week:3, title:'Você ainda controla fiado em caderninho?', tag:'crediário', bg:'bone', icon:'📒', headline:'Você ainda controla fiado em caderninho?', sub:'Caderninho rasga, molha, some. Dívida não.', cta:'raizly.tech' },
+    { id:'st-3-4', week:3, title:'Você lembra o que o cliente preferiu?', tag:'histórico', bg:'rust', icon:'🪪', headline:'Você lembra o que o cliente preferiu na última vez?', sub:'Memória não escala. Sistema escala.', cta:'raizly.tech' },
+    { id:'st-3-5', week:3, title:'A barbearia que o cliente recomenda', tag:'qualidade', bg:'ink', icon:'⭐', headline:'A barbearia que o cliente recomenda tem processo.', sub:'Organização e consistência. Isso é o que faz recomendar.', cta:'raizly.tech' },
+    { id:'st-3-6', week:3, title:'Gestão é o que separa barbearia de negócio.', tag:'gestão', bg:'rust', icon:'📐', headline:'Gestão é o que separa barbearia de negócio.', sub:'Dono que gere toma decisão melhor.', cta:'raizly.tech' },
+    { id:'st-3-7', week:3, title:'Seu ticket médio. Você sabe?', tag:'financeiro', bg:'bone', icon:'💵', headline:'Ticket médio: você sabe o seu?', sub:'Se não sabe, não tem como aumentar.', cta:'raizly.tech' },
+    { id:'st-3-8', week:3, title:'15 dias grátis em raizly.tech', tag:'cta', bg:'ink', icon:'🚀', headline:'Experimente 15 dias grátis.', sub:'Configure em menos de 10 minutos. Sem técnico.', cta:'raizly.tech' },
+    // SEMANA 4 (7) — mix
+    { id:'st-4-1', week:4, title:'Você trabalha na barbearia ou na gestão?', tag:'tempo', bg:'bone', icon:'⏱️', headline:'Você trabalha na barbearia ou na gestão dela?', sub:'Se a resposta for "os dois", o sistema deveria estar fazendo um deles.', cta:'raizly.tech' },
+    { id:'st-4-2', week:4, title:'Sua barbearia parece profissional por dentro?', tag:'profissional', bg:'rust', icon:'🏆', headline:'Sua barbearia parece profissional por dentro?', sub:'Cliente percebe quando tem processo. E recomenda mais.', cta:'raizly.tech' },
+    { id:'st-4-3', week:4, title:'4 passos para começar hoje', tag:'onboarding', bg:'ink', icon:'✅', headline:'4 passos para o Raizly funcionar hoje:', sub:'① Cadastra  ② Adiciona barbeiros  ③ Publica link  ④ Recebe agendamentos.', cta:'raizly.tech' },
+    { id:'st-4-4', week:4, title:'O que acontece quando você não está lá?', tag:'controle', bg:'rust', icon:'📱', headline:'O que acontece na sua barbearia quando você não está lá?', sub:'Com o Raizly no celular: você vê tudo em tempo real.', cta:'raizly.tech' },
+    { id:'st-4-5', week:4, title:'Feito do zero para barbearia.', tag:'raizly', bg:'bone', icon:'💈', headline:'Outros sistemas são adaptados.', sub:'O Raizly foi construído do zero para o jeito que barbearia funciona.', cta:'raizly.tech' },
+    { id:'st-4-6', week:4, title:'Você chegou até aqui.', tag:'fechamento', bg:'ink', icon:'💡', headline:'Você chegou até aqui lendo sobre gestão.', sub:'Isso já diz que você é o tipo de dono que quer crescer.', cta:'raizly.tech' },
+    { id:'st-4-7', week:4, title:'Comece agora. raizly.tech', tag:'cta final', bg:'rust', icon:'🎯', headline:'Comece agora.', sub:'15 dias grátis. Sem cobrança no período de teste.', cta:'raizly.tech' }
+  ];
   </script>
 
   <script>
@@ -993,6 +1185,237 @@
   init();
   </script>
 
+  <script>
+  /* ═══════════════════════════════════════
+     SECTION SWITCH
+  ═══════════════════════════════════════ */
+  function switchSection(sec) {
+    document.getElementById('view-artes').style.display   = sec==='artes'   ? '' : 'none';
+    document.getElementById('view-stories').style.display = sec==='stories' ? '' : 'none';
+    document.getElementById('snav-artes').classList.toggle('active',   sec==='artes');
+    document.getElementById('snav-stories').classList.toggle('active', sec==='stories');
+  }
+
+  /* ═══════════════════════════════════════
+     STORIES RENDER
+  ═══════════════════════════════════════ */
+  function renderStoryCanvas(story, extraClass) {
+    var isBone = story.bg === 'bone';
+    var tagColor = isBone ? 'color:rgba(17,17,17,0.4)' : 'color:rgba(255,255,255,0.5)';
+    var numColor = isBone ? 'color:rgba(17,17,17,0.3)' : 'color:rgba(255,255,255,0.35)';
+    var cls = 'story-canvas bg-'+story.bg + (extraClass ? ' '+extraClass : '');
+    return '<div class="'+cls+'">'
+      +'<div class="sc-progress'+(isBone?' dark':'')+'"><div class="sc-progress-fill"></div></div>'
+      +'<div class="sc-top">'
+      +'<span class="sc-tag" style="'+tagColor+'">'+story.tag+'</span>'
+      +'<span class="sc-num" style="'+numColor+'">story</span>'
+      +'</div>'
+      +'<div class="sc-body">'
+      +'<div class="sc-icon">'+story.icon+'</div>'
+      +'<div class="sc-headline">'+story.headline+'</div>'
+      +'<div class="sc-sub">'+story.sub+'</div>'
+      +'<div class="sc-cta-pill">'+story.cta+'</div>'
+      +'</div>'
+      +'<div class="sc-foot">'
+      +'<span class="sc-logo-wm">raizly</span>'
+      +'<span class="sc-week-badge">semana '+story.week+'</span>'
+      +'</div>'
+      +'</div>';
+  }
+
+  function renderStoryCard(story) {
+    return '<div class="story-card" id="stcard-'+story.id+'">'
+      +'<div class="story-thumb-wrap" onclick="openStoryPlayer(\''+story.id+'\')">'
+      +renderStoryCanvas(story, '')
+      +'<div class="st-overlay">▷ Abrir player</div>'
+      +'</div>'
+      +'<div class="story-card-foot">'
+      +'<div class="story-card-title">'+story.title+'</div>'
+      +'<div class="story-mark-row">'
+      +'<button class="story-btn-mark" onclick="toggleStoryPosted(\''+story.id+'\')">Marcar como postado</button>'
+      +'</div>'
+      +'</div>'
+      +'</div>';
+  }
+
+  function initStories() {
+    [1,2,3,4].forEach(function(w) {
+      var items = STORIES.filter(function(s){ return s.week===w; });
+      document.getElementById('sgrid-'+w).innerHTML = items.map(renderStoryCard).join('');
+    });
+    STORIES.forEach(function(s){ updateStoryCardUI(s.id); });
+    updateStoriesFilterCounts();
+  }
+
+  /* ═══════════════════════════════════════
+     STORY PLAYER
+  ═══════════════════════════════════════ */
+  var _spStory = null;
+  var _spIdx   = 0;
+
+  function openStoryPlayer(storyId) {
+    _spIdx = STORIES.findIndex(function(s){ return s.id===storyId; });
+    _spStory = STORIES[_spIdx];
+    _renderStoryPlayer();
+    document.getElementById('story-player').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeStoryPlayer() {
+    document.getElementById('story-player').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function spNav(dir) {
+    _spIdx = (_spIdx + dir + STORIES.length) % STORIES.length;
+    _spStory = STORIES[_spIdx];
+    _renderStoryPlayer();
+  }
+
+  function _renderStoryPlayer() {
+    var s = _spStory;
+    document.getElementById('sp-info').textContent = s.title + ' · ' + (_spIdx+1) + ' / ' + STORIES.length;
+    var inner = document.getElementById('sp-story-inner');
+    inner.innerHTML = renderStoryCanvas(s, '');
+    inner.className = 'sp-story-inner';
+    // scale to fit wrapper
+    setTimeout(function(){
+      var wrap = document.getElementById('sp-frame-wrap');
+      var ww = wrap.offsetWidth;
+      var wh = wrap.offsetHeight;
+      var scaleW = ww / 1080;
+      var scaleH = wh / 1920;
+      var scale = Math.min(scaleW, scaleH);
+      inner.style.transform = 'scale('+scale+')';
+      // start animation
+      inner.className = 'sp-story-inner story-playing';
+    }, 30);
+    // player dimensions — 9:16 fitting viewport
+    var maxH = window.innerHeight - 130;
+    var maxW = window.innerWidth  - 140;
+    var h = Math.min(maxH, maxW * 1920/1080);
+    var w = h * 1080/1920;
+    var wrap = document.getElementById('sp-frame-wrap');
+    wrap.style.width  = Math.round(w)+'px';
+    wrap.style.height = Math.round(h)+'px';
+    // mark button state
+    var posted = getPosted();
+    var btn = document.getElementById('sp-btn-mark');
+    if (posted['st_'+s.id]) {
+      btn.textContent = '✓ Postado';
+      btn.classList.add('marked');
+    } else {
+      btn.textContent = 'Marcar como postado';
+      btn.classList.remove('marked');
+    }
+  }
+
+  function spReplay() {
+    var inner = document.getElementById('sp-story-inner');
+    inner.className = 'sp-story-inner';
+    void inner.offsetWidth;
+    setTimeout(function(){ inner.className = 'sp-story-inner story-playing'; }, 20);
+  }
+
+  function spToggleMark() {
+    toggleStoryPosted(_spStory.id);
+    var posted = getPosted();
+    var btn = document.getElementById('sp-btn-mark');
+    if (posted['st_'+_spStory.id]) {
+      btn.textContent = '✓ Postado';
+      btn.classList.add('marked');
+    } else {
+      btn.textContent = 'Marcar como postado';
+      btn.classList.remove('marked');
+    }
+  }
+
+  document.addEventListener('keydown', function(e){
+    if (!document.getElementById('story-player').classList.contains('open')) return;
+    if (e.key==='Escape')      closeStoryPlayer();
+    if (e.key==='ArrowLeft')   spNav(-1);
+    if (e.key==='ArrowRight')  spNav(1);
+  });
+
+  /* ═══════════════════════════════════════
+     STORIES POSTED TRACKING
+  ═══════════════════════════════════════ */
+  function toggleStoryPosted(storyId) {
+    var posted = getPosted();
+    var key = 'st_'+storyId;
+    if (posted[key]) { delete posted[key]; }
+    else { posted[key] = new Date().toISOString(); }
+    // persist via Firebase (window.togglePosted is for carrosséis; stories use direct key)
+    if (window._fbToggleKey) {
+      window._fbToggleKey(key, posted[key]);
+    } else {
+      window._posted[key] = posted[key] || undefined;
+      if (!posted[key]) delete window._posted[key];
+    }
+    updateStoryCardUI(storyId);
+    updateStoriesFilterCounts();
+    applyStoriesFilter();
+  }
+
+  function updateStoryCardUI(storyId) {
+    var card = document.getElementById('stcard-'+storyId);
+    if (!card) return;
+    var posted = getPosted();
+    var ts = posted['st_'+storyId];
+    var btn = card.querySelector('.story-btn-mark');
+    if (ts) {
+      card.classList.add('posted');
+      var d = new Date(ts);
+      var fmt = d.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'})+' às '+d.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});
+      if (btn) { btn.textContent='✓ Postado em '+fmt; btn.classList.add('marked'); }
+    } else {
+      card.classList.remove('posted');
+      if (btn) { btn.textContent='Marcar como postado'; btn.classList.remove('marked'); }
+    }
+  }
+
+  /* ═══════════════════════════════════════
+     STORIES FILTER
+  ═══════════════════════════════════════ */
+  var _storiesFilter = 'all';
+
+  function setStoriesFilter(f) {
+    _storiesFilter = f;
+    document.querySelectorAll('.stories-filter-bar .filter-btn').forEach(function(b){ b.classList.remove('active'); });
+    document.getElementById('sf-'+f).classList.add('active');
+    applyStoriesFilter();
+  }
+
+  function applyStoriesFilter() {
+    var posted = getPosted();
+    [1,2,3,4].forEach(function(w) {
+      var items = STORIES.filter(function(s){ return s.week===w; });
+      var visible = 0;
+      items.forEach(function(s) {
+        var card = document.getElementById('stcard-'+s.id);
+        if (!card) return;
+        var isPosted = !!posted['st_'+s.id];
+        var show = _storiesFilter==='all' || (_storiesFilter==='posted' && isPosted) || (_storiesFilter==='pending' && !isPosted);
+        card.style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      var emptyEl = document.getElementById('sempty-'+w);
+      if (emptyEl) emptyEl.style.display = (visible===0 && _storiesFilter!=='all') ? 'block' : 'none';
+    });
+  }
+
+  function updateStoriesFilterCounts() {
+    var posted = getPosted();
+    var postedCount = STORIES.filter(function(s){ return !!posted['st_'+s.id]; }).length;
+    var total = STORIES.length;
+    document.getElementById('sc-all').textContent     = total;
+    document.getElementById('sc-posted').textContent  = postedCount;
+    document.getElementById('sc-pending').textContent = total - postedCount;
+  }
+
+  initStories();
+  </script>
+
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
     import { getDatabase, ref, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js";
@@ -1011,7 +1434,7 @@
     const db        = getDatabase(app);
     const postedRef = ref(db, 'raizly_posted');
 
-    // Sobrescreve togglePosted com versão Firebase
+    // toggle genérico para carrosséis e stories
     window.togglePosted = function(postId) {
       if (window._posted[postId]) {
         remove(ref(db, 'raizly_posted/' + postId));
@@ -1020,13 +1443,27 @@
       }
     };
 
-    // Listener em tempo real — sincroniza todos os dispositivos
+    // toggle para stories (chave prefixada com st_)
+    window._fbToggleKey = function(key, value) {
+      if (!value) {
+        remove(ref(db, 'raizly_posted/' + key));
+      } else {
+        set(ref(db, 'raizly_posted/' + key), value);
+      }
+    };
+
+    // Listener em tempo real — sincroniza carrosséis e stories em todos os dispositivos
     onValue(postedRef, function(snapshot) {
       window._posted = snapshot.val() || {};
       if (typeof POSTS !== 'undefined') {
         POSTS.forEach(function(p) { updateCardUI(p.id); });
         updateFilterCounts();
         applyFilter();
+      }
+      if (typeof STORIES !== 'undefined') {
+        STORIES.forEach(function(s) { updateStoryCardUI(s.id); });
+        updateStoriesFilterCounts();
+        applyStoriesFilter();
       }
     });
   </script>
