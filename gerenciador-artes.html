@@ -199,6 +199,61 @@
     .story-playing .sc-cta-pill     { animation:stPunchIn .3s .85s both; }
     .story-playing .sc-progress-fill { animation:stBarFill 5s .1s both linear; }
 
+    /* ── OWL MASCOT ANIMATIONS ── */
+    .owl-mascot { display:block; overflow:visible; width:62%; height:auto; margin:0 auto; }
+    .owl-mascot .owl-body-group { transform-origin:36px 36px; }
+    .owl-mascot .owl-eye-top    { transform-origin:36px 22px; }
+    .owl-mascot .owl-eye-bot    { transform-origin:36px 40px; }
+    .owl-star-1,.owl-star-2,.owl-star-3 { opacity:0; }
+    .owl-zzz-1,.owl-zzz-2,.owl-zzz-3   { opacity:0; }
+
+    /* blink */
+    @keyframes owlBlink     { 0%,78%,100%{transform:scaleY(1)} 84%{transform:scaleY(0.07)} 88%{transform:scaleY(1)} 93%{transform:scaleY(0.07)} 97%{transform:scaleY(1)} }
+    .owl-blink .owl-eye-top { animation:owlBlink 3.8s infinite; }
+    .owl-blink .owl-eye-bot { animation:owlBlink 3.8s .06s infinite; }
+
+    /* jump */
+    @keyframes owlJump      { 0%,100%{transform:translateY(0) scaleX(1) scaleY(1)} 25%{transform:translateY(-13px) scaleX(0.95) scaleY(1.08)} 45%{transform:translateY(-17px) scaleX(0.93) scaleY(1.1)} 65%{transform:translateY(-5px) scaleX(1.03) scaleY(0.97)} 82%{transform:translateY(-2px)} }
+    @keyframes owlBlinkFast { 0%,55%,100%{transform:scaleY(1)} 65%{transform:scaleY(0.08)} }
+    .owl-jump .owl-body-group { animation:owlJump 1.3s ease-in-out infinite; }
+    .owl-jump .owl-eye-top    { animation:owlBlinkFast 1.3s infinite; }
+    .owl-jump .owl-eye-bot    { animation:owlBlinkFast 1.3s .05s infinite; }
+
+    /* happy */
+    @keyframes owlHappy     { 0%,100%{transform:rotate(0) scale(1)} 18%{transform:rotate(-13deg) scale(1.12)} 38%{transform:rotate(13deg) scale(1.12)} 58%{transform:rotate(-7deg) scale(1.06)} 78%{transform:rotate(7deg) scale(1.06)} 92%{transform:rotate(-2deg)} }
+    @keyframes owlHappyEye  { 0%,48%,100%{transform:scaleY(1)} 56%{transform:scaleY(0.08)} 62%{transform:scaleY(1)} }
+    @keyframes owlStarPop   { 0%,100%{opacity:0;transform:scale(0) rotate(0)} 40%{opacity:1;transform:scale(1.2) rotate(160deg)} 70%{opacity:0.6;transform:scale(1) rotate(280deg)} }
+    .owl-happy .owl-body-group { animation:owlHappy 1.7s ease-in-out infinite; }
+    .owl-happy .owl-eye-top    { animation:owlHappyEye 1.7s infinite; }
+    .owl-happy .owl-eye-bot    { animation:owlHappyEye 1.7s .06s infinite; }
+    .owl-happy .owl-star-1     { animation:owlStarPop 1.7s .1s infinite; }
+    .owl-happy .owl-star-2     { animation:owlStarPop 1.7s .6s infinite; }
+    .owl-happy .owl-star-3     { animation:owlStarPop 1.7s 1.1s infinite; }
+
+    /* sleep */
+    @keyframes owlSleep     { 0%,100%{transform:rotate(-6deg) translateY(0)} 50%{transform:rotate(5deg) translateY(5px)} }
+    @keyframes owlEyeShut   { 0%,100%{transform:scaleY(0.09)} }
+    @keyframes owlZzz       { 0%{opacity:0;transform:translate(0,0) scale(0.4)} 25%{opacity:1} 80%{opacity:.7} 100%{opacity:0;transform:translate(5px,-22px) scale(1.1)} }
+    .owl-sleep .owl-body-group { animation:owlSleep 2.2s ease-in-out infinite; }
+    .owl-sleep .owl-eye-top    { animation:owlEyeShut 2.2s infinite; }
+    .owl-sleep .owl-eye-bot    { animation:owlEyeShut 2.2s .05s infinite; }
+    .owl-sleep .owl-zzz-1      { animation:owlZzz 2s .2s infinite; }
+    .owl-sleep .owl-zzz-2      { animation:owlZzz 2s .9s infinite; }
+    .owl-sleep .owl-zzz-3      { animation:owlZzz 2s 1.6s infinite; }
+
+    /* excited */
+    @keyframes owlExcited   { 0%,100%{transform:scale(1) rotate(0)} 10%{transform:scale(1.14) rotate(-7deg)} 20%{transform:scale(1.14) rotate(7deg)} 30%{transform:scale(1.09) rotate(-4deg)} 40%{transform:scale(1.09) rotate(4deg)} 55%{transform:scale(1)} }
+    @keyframes owlExcitedEye{ 0%,100%{transform:scale(1)} 22%{transform:scale(1.35)} }
+    .owl-excited .owl-body-group { animation:owlExcited .85s infinite; }
+    .owl-excited .owl-eye-top    { animation:owlExcitedEye .85s infinite; }
+    .owl-excited .owl-eye-bot    { animation:owlExcitedEye .85s .05s infinite; }
+    .owl-excited .owl-star-1     { animation:owlStarPop .85s 0s infinite; }
+    .owl-excited .owl-star-2     { animation:owlStarPop .85s .25s infinite; }
+    .owl-excited .owl-star-3     { animation:owlStarPop .85s .5s infinite; }
+
+    /* story-playing triggers entry animations on owl */
+    .story-playing .owl-mascot  { animation:stPunchIn .4s .15s both; }
+
     /* ── STORIES FILTER BAR ── */
     .stories-filter-bar { display:flex; gap:0; padding:0 40px; border-bottom:1px solid var(--dim); background:rgba(17,17,17,0.5); }
 
@@ -825,40 +880,40 @@
 
   /* ── 30 STORIES ── */
   var STORIES = [
-    // SEMANA 1 (7) — reforço carrosséis
-    { id:'st-1-1', week:1, title:'Você ainda agenda por WhatsApp?', tag:'agendamento', bg:'rust', icon:'📅', headline:'Você ainda agenda por WhatsApp?', sub:'É difícil de controlar, fácil de perder. Tem um jeito melhor.', cta:'raizly.tech' },
-    { id:'st-1-2', week:1, title:'Sua agenda está na cabeça?', tag:'agenda', bg:'ink', icon:'📋', headline:'Sua agenda está no celular pessoal ou na cabeça?', sub:'Isso não é agenda. É improviso.', cta:'raizly.tech' },
-    { id:'st-1-3', week:1, title:'Você sabe quanto faturou?', tag:'dashboard', bg:'bone', icon:'📊', headline:'Quanto sua barbearia faturou essa semana?', sub:'Se precisou pensar, o problema está respondido.', cta:'raizly.tech' },
-    { id:'st-1-4', week:1, title:'Quanto entrou e saiu esse mês?', tag:'financeiro', bg:'rust', icon:'💰', headline:'Quanto entrou e saiu esse mês?', sub:'Se você não sabe agora, descobre tarde demais.', cta:'raizly.tech' },
-    { id:'st-1-5', week:1, title:'Seu cliente sumiu?', tag:'comunicação', bg:'ink', icon:'💬', headline:'Seu cliente marcou e você não sabe se vem.', sub:'Lembrete automático resolve. Você só atende.', cta:'raizly.tech' },
-    { id:'st-1-6', week:1, title:'Quanto cada barbeiro gerou?', tag:'equipe', bg:'rust', icon:'✂️', headline:'Quanto cada barbeiro gerou esse mês?', sub:'Se não sabe de cabeça, não tem gestão de equipe.', cta:'raizly.tech' },
-    { id:'st-1-7', week:1, title:'Você monta planilha toda semana?', tag:'relatórios', bg:'bone', icon:'📈', headline:'Você monta planilha toda semana?', sub:'Você deveria estar crescendo, não montando tabela.', cta:'raizly.tech' },
-    // SEMANA 2 (8) — mix
-    { id:'st-2-1', week:2, title:'Alguém deve e você não lembra?', tag:'crediário', bg:'rust', icon:'💳', headline:'Alguém deve e você já não lembra quanto?', sub:'Caderninho rasga. Dívida não.', cta:'raizly.tech' },
-    { id:'st-2-2', week:2, title:'Sua barbearia funciona sem você?', tag:'automação', bg:'ink', icon:'⚡', headline:'Sua barbearia funciona quando você não está lá?', sub:'Se tudo para quando você para, você tem emprego, não negócio.', cta:'raizly.tech' },
-    { id:'st-2-3', week:2, title:'Barbearia organizada não é sorte.', tag:'raizly', bg:'bone', icon:'💈', headline:'Barbearia organizada não é sorte.', sub:'É sistema. Feito do zero para barbearia.', cta:'raizly.tech' },
-    { id:'st-2-4', week:2, title:'3 sinais que você precisa de sistema', tag:'dica', bg:'rust', icon:'🔎', headline:'3 sinais que sua barbearia precisa de sistema:', sub:'① Agenda no WhatsApp  ② Financeiro no chute  ③ Você não sabe quem sumiu.', cta:'raizly.tech' },
-    { id:'st-2-5', week:2, title:'Barbearia de sucesso não improvisa.', tag:'gestão', bg:'ink', icon:'🏆', headline:'Barbearia de sucesso não improvisa.', sub:'Tem processo. Tem dado. Tem controle.', cta:'raizly.tech' },
-    { id:'st-2-6', week:2, title:'15 dias grátis. Sem compromisso.', tag:'oferta', bg:'rust', icon:'🎯', headline:'15 dias grátis.', sub:'Sem cobrar nada durante o teste. Configure hoje, receba agendamentos amanhã.', cta:'raizly.tech' },
-    { id:'st-2-7', week:2, title:'No-show custa dinheiro.', tag:'no-show', bg:'bone', icon:'🚫', headline:'No-show custa dinheiro.', sub:'Lembrete automático reduz falta. Horário vazio é receita que não entrou.', cta:'raizly.tech' },
-    { id:'st-2-8', week:2, title:'Dono com sistema ganha mais tempo.', tag:'tempo', bg:'ink', icon:'⏱️', headline:'Dono que usa sistema ganha tempo de volta.', sub:'Menos tarefa operacional. Mais decisão estratégica.', cta:'raizly.tech' },
-    // SEMANA 3 (8) — mix
-    { id:'st-3-1', week:3, title:'Seu cliente voltou esse mês?', tag:'fidelização', bg:'rust', icon:'🔁', headline:'Seu cliente veio mês passado. E esse mês?', sub:'A maioria dos donos não sabe. O Raizly sabe.', cta:'raizly.tech' },
-    { id:'st-3-2', week:3, title:'Cliente marcou. Não apareceu.', tag:'no-show', bg:'ink', icon:'📵', headline:'Cliente marcou. Não apareceu.', sub:'Acontece toda semana. Dá para evitar.', cta:'raizly.tech' },
-    { id:'st-3-3', week:3, title:'Você ainda controla fiado em caderninho?', tag:'crediário', bg:'bone', icon:'📒', headline:'Você ainda controla fiado em caderninho?', sub:'Caderninho rasga, molha, some. Dívida não.', cta:'raizly.tech' },
-    { id:'st-3-4', week:3, title:'Você lembra o que o cliente preferiu?', tag:'histórico', bg:'rust', icon:'🪪', headline:'Você lembra o que o cliente preferiu na última vez?', sub:'Memória não escala. Sistema escala.', cta:'raizly.tech' },
-    { id:'st-3-5', week:3, title:'A barbearia que o cliente recomenda', tag:'qualidade', bg:'ink', icon:'⭐', headline:'A barbearia que o cliente recomenda tem processo.', sub:'Organização e consistência. Isso é o que faz recomendar.', cta:'raizly.tech' },
-    { id:'st-3-6', week:3, title:'Gestão é o que separa barbearia de negócio.', tag:'gestão', bg:'rust', icon:'📐', headline:'Gestão é o que separa barbearia de negócio.', sub:'Dono que gere toma decisão melhor.', cta:'raizly.tech' },
-    { id:'st-3-7', week:3, title:'Seu ticket médio. Você sabe?', tag:'financeiro', bg:'bone', icon:'💵', headline:'Ticket médio: você sabe o seu?', sub:'Se não sabe, não tem como aumentar.', cta:'raizly.tech' },
-    { id:'st-3-8', week:3, title:'15 dias grátis em raizly.tech', tag:'cta', bg:'ink', icon:'🚀', headline:'Experimente 15 dias grátis.', sub:'Configure em menos de 10 minutos. Sem técnico.', cta:'raizly.tech' },
-    // SEMANA 4 (7) — mix
-    { id:'st-4-1', week:4, title:'Você trabalha na barbearia ou na gestão?', tag:'tempo', bg:'bone', icon:'⏱️', headline:'Você trabalha na barbearia ou na gestão dela?', sub:'Se a resposta for "os dois", o sistema deveria estar fazendo um deles.', cta:'raizly.tech' },
-    { id:'st-4-2', week:4, title:'Sua barbearia parece profissional por dentro?', tag:'profissional', bg:'rust', icon:'🏆', headline:'Sua barbearia parece profissional por dentro?', sub:'Cliente percebe quando tem processo. E recomenda mais.', cta:'raizly.tech' },
-    { id:'st-4-3', week:4, title:'4 passos para começar hoje', tag:'onboarding', bg:'ink', icon:'✅', headline:'4 passos para o Raizly funcionar hoje:', sub:'① Cadastra  ② Adiciona barbeiros  ③ Publica link  ④ Recebe agendamentos.', cta:'raizly.tech' },
-    { id:'st-4-4', week:4, title:'O que acontece quando você não está lá?', tag:'controle', bg:'rust', icon:'📱', headline:'O que acontece na sua barbearia quando você não está lá?', sub:'Com o Raizly no celular: você vê tudo em tempo real.', cta:'raizly.tech' },
-    { id:'st-4-5', week:4, title:'Feito do zero para barbearia.', tag:'raizly', bg:'bone', icon:'💈', headline:'Outros sistemas são adaptados.', sub:'O Raizly foi construído do zero para o jeito que barbearia funciona.', cta:'raizly.tech' },
-    { id:'st-4-6', week:4, title:'Você chegou até aqui.', tag:'fechamento', bg:'ink', icon:'💡', headline:'Você chegou até aqui lendo sobre gestão.', sub:'Isso já diz que você é o tipo de dono que quer crescer.', cta:'raizly.tech' },
-    { id:'st-4-7', week:4, title:'Comece agora. raizly.tech', tag:'cta final', bg:'rust', icon:'🎯', headline:'Comece agora.', sub:'15 dias grátis. Sem cobrança no período de teste.', cta:'raizly.tech' }
+    // SEMANA 1 — reforço carrosséis
+    { id:'st-1-1', week:1, owl:'sleep',   title:'Você ainda agenda por WhatsApp?',         tag:'agendamento', bg:'rust', headline:'Você ainda agenda por WhatsApp?',                          sub:'É difícil de controlar, fácil de perder. Tem um jeito melhor.',                  cta:'raizly.tech' },
+    { id:'st-1-2', week:1, owl:'sleep',   title:'Sua agenda está na cabeça?',               tag:'agenda',      bg:'ink',  headline:'Sua agenda está no celular pessoal ou na cabeça?',        sub:'Isso não é agenda. É improviso.',                                                  cta:'raizly.tech' },
+    { id:'st-1-3', week:1, owl:'blink',   title:'Você sabe quanto faturou?',                tag:'dashboard',   bg:'bone', headline:'Quanto sua barbearia faturou essa semana?',               sub:'Se precisou pensar, o problema está respondido.',                                  cta:'raizly.tech' },
+    { id:'st-1-4', week:1, owl:'blink',   title:'Quanto entrou e saiu esse mês?',           tag:'financeiro',  bg:'rust', headline:'Quanto entrou e saiu esse mês?',                         sub:'Se você não sabe agora, descobre tarde demais.',                                   cta:'raizly.tech' },
+    { id:'st-1-5', week:1, owl:'sleep',   title:'Seu cliente sumiu?',                       tag:'comunicação', bg:'ink',  headline:'Seu cliente marcou e você não sabe se vem.',              sub:'Lembrete automático resolve. Você só atende.',                                     cta:'raizly.tech' },
+    { id:'st-1-6', week:1, owl:'blink',   title:'Quanto cada barbeiro gerou?',              tag:'equipe',      bg:'rust', headline:'Quanto cada barbeiro gerou esse mês?',                   sub:'Se não sabe de cabeça, não tem gestão de equipe.',                                 cta:'raizly.tech' },
+    { id:'st-1-7', week:1, owl:'sleep',   title:'Você monta planilha toda semana?',         tag:'relatórios',  bg:'bone', headline:'Você monta planilha toda semana?',                       sub:'Você deveria estar crescendo, não montando tabela.',                               cta:'raizly.tech' },
+    // SEMANA 2 — mix
+    { id:'st-2-1', week:2, owl:'sleep',   title:'Alguém deve e você não lembra?',           tag:'crediário',   bg:'rust', headline:'Alguém deve e você já não lembra quanto?',               sub:'Caderninho rasga. Dívida não.',                                                    cta:'raizly.tech' },
+    { id:'st-2-2', week:2, owl:'jump',    title:'Sua barbearia funciona sem você?',         tag:'automação',   bg:'ink',  headline:'Sua barbearia funciona quando você não está lá?',        sub:'Se tudo para quando você para, você tem emprego, não negócio.',                   cta:'raizly.tech' },
+    { id:'st-2-3', week:2, owl:'happy',   title:'Barbearia organizada não é sorte.',        tag:'raizly',      bg:'bone', headline:'Barbearia organizada não é sorte.',                      sub:'É sistema. Feito do zero para barbearia.',                                         cta:'raizly.tech' },
+    { id:'st-2-4', week:2, owl:'excited', title:'3 sinais que você precisa de sistema',     tag:'dica',        bg:'rust', headline:'3 sinais que sua barbearia precisa de sistema:',         sub:'① Agenda no WhatsApp  ② Financeiro no chute  ③ Você não sabe quem sumiu.',       cta:'raizly.tech' },
+    { id:'st-2-5', week:2, owl:'happy',   title:'Barbearia de sucesso não improvisa.',      tag:'gestão',      bg:'ink',  headline:'Barbearia de sucesso não improvisa.',                    sub:'Tem processo. Tem dado. Tem controle.',                                            cta:'raizly.tech' },
+    { id:'st-2-6', week:2, owl:'jump',    title:'15 dias grátis. Sem compromisso.',         tag:'oferta',      bg:'rust', headline:'15 dias grátis.',                                        sub:'Sem cobrar nada durante o teste. Configure hoje, receba agendamentos amanhã.',    cta:'raizly.tech' },
+    { id:'st-2-7', week:2, owl:'sleep',   title:'No-show custa dinheiro.',                  tag:'no-show',     bg:'bone', headline:'No-show custa dinheiro.',                                sub:'Lembrete automático reduz falta. Horário vazio é receita que não entrou.',         cta:'raizly.tech' },
+    { id:'st-2-8', week:2, owl:'happy',   title:'Dono com sistema ganha mais tempo.',       tag:'tempo',       bg:'ink',  headline:'Dono que usa sistema ganha tempo de volta.',             sub:'Menos tarefa operacional. Mais decisão estratégica.',                              cta:'raizly.tech' },
+    // SEMANA 3 — mix
+    { id:'st-3-1', week:3, owl:'blink',   title:'Seu cliente voltou esse mês?',             tag:'fidelização', bg:'rust', headline:'Seu cliente veio mês passado. E esse mês?',              sub:'A maioria dos donos não sabe. O Raizly sabe.',                                     cta:'raizly.tech' },
+    { id:'st-3-2', week:3, owl:'sleep',   title:'Cliente marcou. Não apareceu.',            tag:'no-show',     bg:'ink',  headline:'Cliente marcou. Não apareceu.',                          sub:'Acontece toda semana. Dá para evitar.',                                            cta:'raizly.tech' },
+    { id:'st-3-3', week:3, owl:'sleep',   title:'Você ainda controla fiado em caderninho?', tag:'crediário',   bg:'bone', headline:'Você ainda controla fiado em caderninho?',               sub:'Caderninho rasga, molha, some. Dívida não.',                                       cta:'raizly.tech' },
+    { id:'st-3-4', week:3, owl:'blink',   title:'Você lembra o que o cliente preferiu?',   tag:'histórico',   bg:'rust', headline:'Você lembra o que o cliente preferiu na última vez?',   sub:'Memória não escala. Sistema escala.',                                              cta:'raizly.tech' },
+    { id:'st-3-5', week:3, owl:'happy',   title:'A barbearia que o cliente recomenda',      tag:'qualidade',   bg:'ink',  headline:'A barbearia que o cliente recomenda tem processo.',      sub:'Organização e consistência. Isso é o que faz recomendar.',                         cta:'raizly.tech' },
+    { id:'st-3-6', week:3, owl:'excited', title:'Gestão separa barbearia de negócio.',      tag:'gestão',      bg:'rust', headline:'Gestão é o que separa barbearia de negócio.',            sub:'Dono que gere toma decisão melhor.',                                               cta:'raizly.tech' },
+    { id:'st-3-7', week:3, owl:'blink',   title:'Seu ticket médio. Você sabe?',             tag:'financeiro',  bg:'bone', headline:'Ticket médio: você sabe o seu?',                        sub:'Se não sabe, não tem como aumentar.',                                              cta:'raizly.tech' },
+    { id:'st-3-8', week:3, owl:'jump',    title:'15 dias grátis em raizly.tech',            tag:'cta',         bg:'ink',  headline:'Experimente 15 dias grátis.',                            sub:'Configure em menos de 10 minutos. Sem técnico.',                                   cta:'raizly.tech' },
+    // SEMANA 4 — mix
+    { id:'st-4-1', week:4, owl:'happy',   title:'Você trabalha na barbearia ou na gestão?', tag:'tempo',       bg:'bone', headline:'Você trabalha na barbearia ou na gestão dela?',          sub:'Se "os dois", o sistema deveria estar fazendo um deles.',                          cta:'raizly.tech' },
+    { id:'st-4-2', week:4, owl:'happy',   title:'Sua barbearia parece profissional?',       tag:'profissional',bg:'rust', headline:'Sua barbearia parece profissional por dentro?',          sub:'Cliente percebe quando tem processo. E recomenda mais.',                           cta:'raizly.tech' },
+    { id:'st-4-3', week:4, owl:'jump',    title:'4 passos para começar hoje',               tag:'onboarding',  bg:'ink',  headline:'4 passos para o Raizly funcionar hoje:',                sub:'① Cadastra  ② Adiciona barbeiros  ③ Publica link  ④ Recebe agendamentos.',       cta:'raizly.tech' },
+    { id:'st-4-4', week:4, owl:'excited', title:'O que acontece quando você não está lá?',  tag:'controle',    bg:'rust', headline:'O que acontece na sua barbearia quando você não está lá?', sub:'Com o Raizly no celular: você vê tudo em tempo real.',                        cta:'raizly.tech' },
+    { id:'st-4-5', week:4, owl:'happy',   title:'Feito do zero para barbearia.',            tag:'raizly',      bg:'bone', headline:'Outros sistemas são adaptados.',                         sub:'O Raizly foi construído do zero para o jeito que barbearia funciona.',             cta:'raizly.tech' },
+    { id:'st-4-6', week:4, owl:'happy',   title:'Você chegou até aqui.',                    tag:'fechamento',  bg:'ink',  headline:'Você chegou até aqui lendo sobre gestão.',               sub:'Isso já diz que você é o tipo de dono que quer crescer.',                          cta:'raizly.tech' },
+    { id:'st-4-7', week:4, owl:'jump',    title:'Comece agora. raizly.tech',                tag:'cta final',   bg:'rust', headline:'Comece agora.',                                          sub:'15 dias grátis. Sem cobrança no período de teste.',                                cta:'raizly.tech' }
   ];
   </script>
 
@@ -879,6 +934,49 @@
       +'</g>'
       +'<polygon points="26,10 31,18 21,18" fill="#E8430A"/>'
       +'<polygon points="46,10 51,18 41,18" fill="#E8430A"/>'
+      +'</svg>';
+  }
+
+  function renderOwlSVG(state, bgType) {
+    var isLight  = bgType === 'bone';
+    var body     = isLight ? '#111111'              : '#F0EDE6';
+    var eyeOuter = isLight ? '#F0EDE6'              : '#111111';
+    var eyeInner = '#E8430A';
+    var eyeHL    = isLight ? 'rgba(17,17,17,0.35)'  : 'white';
+    var nose     = isLight ? '#F0EDE6'              : '#111111';
+    var ear      = bgType === 'rust' ? '#F0EDE6'    : '#E8430A';
+    var zzz      = isLight ? 'rgba(17,17,17,0.55)'  : 'rgba(240,237,230,0.65)';
+    var star     = isLight ? '#c43208'              : '#E8430A';
+    var cls      = 'owl-mascot owl-' + (state || 'blink');
+    return '<svg class="'+cls+'" viewBox="0 0 72 72" xmlns="http://www.w3.org/2000/svg">'
+      // ears (outside body-group so they stay static while body wobbles)
+      +'<polygon class="owl-ear-l" points="26,10 31,18 21,18" fill="'+ear+'"/>'
+      +'<polygon class="owl-ear-r" points="46,10 51,18 41,18" fill="'+ear+'"/>'
+      // body group — receives jump / happy / sleep / excited CSS animations
+      +'<g class="owl-body-group">'
+        +'<g transform="rotate(-22,36,36)">'
+          +'<rect x="24" y="6" width="24" height="60" rx="12" fill="'+body+'"/>'
+          +'<g class="owl-eye-top">'
+            +'<circle cx="36" cy="22" r="6.5" fill="'+eyeOuter+'"/>'
+            +'<circle cx="36" cy="22" r="3"   fill="'+eyeInner+'"/>'
+            +'<circle cx="37.5" cy="20.5" r="1.2" fill="'+eyeHL+'"/>'
+          +'</g>'
+          +'<polygon points="36,29 33,33 39,33" fill="'+nose+'"/>'
+          +'<g class="owl-eye-bot">'
+            +'<circle cx="36" cy="40" r="6.5" fill="'+eyeOuter+'"/>'
+            +'<circle cx="36" cy="40" r="3"   fill="'+eyeInner+'"/>'
+            +'<circle cx="37.5" cy="38.5" r="1.2" fill="'+eyeHL+'"/>'
+          +'</g>'
+        +'</g>'
+      +'</g>'
+      // zzz bubbles — float up during sleep state
+      +'<text class="owl-zzz-1" x="50" y="32" fill="'+zzz+'" font-size="8"  font-weight="700" font-family="JetBrains Mono,monospace">z</text>'
+      +'<text class="owl-zzz-2" x="54" y="22" fill="'+zzz+'" font-size="10" font-weight="700" font-family="JetBrains Mono,monospace">z</text>'
+      +'<text class="owl-zzz-3" x="57" y="13" fill="'+zzz+'" font-size="13" font-weight="700" font-family="JetBrains Mono,monospace">Z</text>'
+      // sparkle stars — pop in during happy / excited states
+      +'<text class="owl-star-1" x="52" y="16" fill="'+star+'" font-size="10">✦</text>'
+      +'<text class="owl-star-2" x="9"  y="22" fill="'+star+'" font-size="8">✦</text>'
+      +'<text class="owl-star-3" x="54" y="42" fill="'+star+'" font-size="7">✦</text>'
       +'</svg>';
   }
 
@@ -1211,7 +1309,7 @@
       +'<span class="sc-num" style="'+numColor+'">story</span>'
       +'</div>'
       +'<div class="sc-body">'
-      +'<div class="sc-icon">'+story.icon+'</div>'
+      +'<div class="sc-icon">'+renderOwlSVG(story.owl, story.bg)+'</div>'
       +'<div class="sc-headline">'+story.headline+'</div>'
       +'<div class="sc-sub">'+story.sub+'</div>'
       +'<div class="sc-cta-pill">'+story.cta+'</div>'
