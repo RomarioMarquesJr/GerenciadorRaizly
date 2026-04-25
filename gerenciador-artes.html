@@ -285,6 +285,14 @@
     /* ── STORY PLAYER MODAL ── */
     #story-player { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.97); align-items:center; justify-content:center; gap:clamp(8px,2vw,28px); padding:16px; }
     #story-player.open { display:flex; }
+    /* fullscreen — story ocupa tela inteira */
+    #story-player:fullscreen,
+    #story-player:-webkit-full-screen { padding:8px; gap:8px; }
+    /* fullscreen — carrossel ocupa tela inteira */
+    #modal:fullscreen .modal-center,
+    #modal:-webkit-full-screen .modal-center { max-width:none; }
+    #modal:fullscreen .modal-slide-wrap,
+    #modal:-webkit-full-screen .modal-slide-wrap { max-height:92vh; max-width:calc(92vh * 1080/1350); }
     .sp-arrow { width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.07); border:1px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:20px; color:white; cursor:pointer; flex-shrink:0; transition:background .2s; user-select:none; }
     .sp-arrow:hover { background:rgba(255,255,255,0.14); }
     .sp-arrow.hidden { visibility:hidden; }
@@ -1086,11 +1094,14 @@
     _mp = POSTS.filter(function(p){ return p.id===postId; })[0];
     _mi = idx;
     _renderModal();
-    document.getElementById('modal').classList.add('open');
+    var el = document.getElementById('modal');
+    el.classList.add('open');
     document.body.style.overflow = 'hidden';
+    _requestFS(el);
   }
 
-  function closeModal() {
+  function closeModal(skipFS) {
+    if (!skipFS) _exitFS();
     document.getElementById('modal').classList.remove('open');
     document.body.style.overflow = '';
     document.getElementById('ind-panel').classList.remove('open');
@@ -1376,15 +1387,60 @@
   var _spStory = null;
   var _spIdx   = 0;
 
+  /* ═══════════════════════════════════════
+     FULLSCREEN HELPERS
+  ═══════════════════════════════════════ */
+  function _requestFS(el) {
+    if (el.requestFullscreen)            el.requestFullscreen().catch(function(){});
+    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+  }
+  function _exitFS() {
+    try {
+      if (document.exitFullscreen)            document.exitFullscreen();
+      else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+    } catch(e) {}
+  }
+  function _sizeStoryWrap() {
+    var isFS  = !!(document.fullscreenElement || document.webkitFullscreenElement);
+    var isMob = window.innerWidth <= 600;
+    var maxH  = window.innerHeight - (isFS ? 80  : isMob ? 90  : 130);
+    var maxW  = window.innerWidth  - (isFS ? 20  : isMob ? 20  : 140);
+    var h = Math.round(Math.min(maxH, maxW * 1920/1080));
+    var w = Math.round(h * 1080/1920);
+    var wrap  = document.getElementById('sp-frame-wrap');
+    var inner = document.getElementById('sp-story-inner');
+    wrap.style.width  = w+'px';
+    wrap.style.height = h+'px';
+    if (inner) inner.style.transform = 'scale('+(w/1080)+')';
+  }
+  (function(){
+    function _onFSChange() {
+      var isFS    = !!(document.fullscreenElement || document.webkitFullscreenElement);
+      var spOpen  = document.getElementById('story-player').classList.contains('open');
+      var modOpen = document.getElementById('modal').classList.contains('open');
+      if (isFS) {
+        if (spOpen) setTimeout(_sizeStoryWrap, 60);
+      } else {
+        if (spOpen)  closeStoryPlayer(true);
+        if (modOpen) closeModal(true);
+      }
+    }
+    document.addEventListener('fullscreenchange',       _onFSChange);
+    document.addEventListener('webkitfullscreenchange', _onFSChange);
+  })();
+
   function openStoryPlayer(storyId) {
     _spIdx = STORIES.findIndex(function(s){ return s.id===storyId; });
     _spStory = STORIES[_spIdx];
     _renderStoryPlayer();
-    document.getElementById('story-player').classList.add('open');
+    var el = document.getElementById('story-player');
+    el.classList.add('open');
     document.body.style.overflow = 'hidden';
+    _requestFS(el);
   }
 
-  function closeStoryPlayer() {
+  function closeStoryPlayer(skipFS) {
+    if (!skipFS) _exitFS();
     document.getElementById('story-player').classList.remove('open');
     document.body.style.overflow = '';
   }
@@ -1401,27 +1457,8 @@
     var inner = document.getElementById('sp-story-inner');
     inner.innerHTML = renderStoryCanvas(s, 'sc-player');
     inner.className = 'sp-story-inner';
-    // scale to fit wrapper
-    setTimeout(function(){
-      var wrap = document.getElementById('sp-frame-wrap');
-      var ww = wrap.offsetWidth;
-      var wh = wrap.offsetHeight;
-      var scaleW = ww / 1080;
-      var scaleH = wh / 1920;
-      var scale = Math.min(scaleW, scaleH);
-      inner.style.transform = 'scale('+scale+')';
-      // start animation
-      inner.className = 'sp-story-inner story-playing';
-    }, 30);
-    // player dimensions — no mobile ocupa largura total, no desktop respeita setas laterais
-    var isMob = window.innerWidth <= 600;
-    var maxH  = window.innerHeight - (isMob ? 90  : 130);
-    var maxW  = window.innerWidth  - (isMob ? 20  : 140);
-    var h = Math.min(maxH, maxW * 1920/1080);
-    var w = h * 1080/1920;
-    var wrap = document.getElementById('sp-frame-wrap');
-    wrap.style.width  = Math.round(w)+'px';
-    wrap.style.height = Math.round(h)+'px';
+    _sizeStoryWrap();
+    setTimeout(function(){ inner.className = 'sp-story-inner story-playing'; }, 30);
     // mark button state
     var posted = getPosted();
     var btn = document.getElementById('sp-btn-mark');
