@@ -285,9 +285,23 @@
     /* ── STORY PLAYER MODAL ── */
     #story-player { display:none; position:fixed; inset:0; z-index:300; background:rgba(0,0,0,0.97); align-items:center; justify-content:center; gap:clamp(8px,2vw,28px); padding:16px; }
     #story-player.open { display:flex; }
-    /* fullscreen — story ocupa tela inteira */
+    /* fullscreen — story domina tela inteira, zero chrome */
     #story-player:fullscreen,
-    #story-player:-webkit-full-screen { padding:8px; gap:8px; }
+    #story-player:-webkit-full-screen { padding:0; gap:0; background:#000; }
+    #story-player:fullscreen .sp-info,
+    #story-player:-webkit-full-screen .sp-info,
+    #story-player:fullscreen .sp-actions,
+    #story-player:-webkit-full-screen .sp-actions { display:none; }
+    #story-player:fullscreen .sp-center,
+    #story-player:-webkit-full-screen .sp-center { width:100%; height:100%; justify-content:center; }
+    #story-player:fullscreen .sp-frame-wrap,
+    #story-player:-webkit-full-screen .sp-frame-wrap { border-radius:0 !important; box-shadow:none !important; }
+    #story-player:fullscreen .sp-arrow,
+    #story-player:-webkit-full-screen .sp-arrow { position:absolute; top:50%; transform:translateY(-50%); z-index:10; background:rgba(0,0,0,0.22); border-color:rgba(255,255,255,0.06); }
+    #story-player:fullscreen #sp-prev,
+    #story-player:-webkit-full-screen #sp-prev { left:10px; }
+    #story-player:fullscreen #sp-next,
+    #story-player:-webkit-full-screen #sp-next { right:10px; }
     /* fullscreen — carrossel ocupa tela inteira */
     #modal:fullscreen .modal-center,
     #modal:-webkit-full-screen .modal-center { max-width:none; }
@@ -1403,8 +1417,8 @@
   function _sizeStoryWrap() {
     var isFS  = !!(document.fullscreenElement || document.webkitFullscreenElement);
     var isMob = window.innerWidth <= 600;
-    var maxH  = window.innerHeight - (isFS ? 80  : isMob ? 90  : 130);
-    var maxW  = window.innerWidth  - (isFS ? 20  : isMob ? 20  : 140);
+    var maxH  = isFS ? window.innerHeight                       : window.innerHeight - (isMob ? 90  : 130);
+    var maxW  = isFS ? window.innerWidth                        : window.innerWidth  - (isMob ? 20  : 140);
     var h = Math.round(Math.min(maxH, maxW * 1920/1080));
     var w = Math.round(h * 1080/1920);
     var wrap  = document.getElementById('sp-frame-wrap');
