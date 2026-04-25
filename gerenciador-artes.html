@@ -184,6 +184,31 @@
     .sc-logo-wm { font-weight:800; font-size:clamp(9px,3%,13px); opacity:.35; letter-spacing:-.3px; }
     .sc-week-badge { font-family:'JetBrains Mono',monospace; font-size:clamp(7px,2.5%,10px); text-transform:uppercase; letter-spacing:.5px; opacity:.4; }
 
+    /* ── PLAYER MODE — tamanhos reais para canvas 1080×1920px ── */
+    .sc-player .sc-progress  { height:8px; margin:0 40px; }
+    .sc-player .sc-top       { padding:40px 52px 28px; }
+    .sc-player .sc-tag       { font-size:30px; letter-spacing:2px; }
+    .sc-player .sc-num       { font-size:26px; }
+    .sc-player .sc-body      { padding:0 52px; gap:40px; }
+    .sc-player .sc-icon      { font-size:130px; }
+    .sc-player .sc-headline  { font-size:76px; line-height:1.15; }
+    .sc-player .sc-sub       { font-size:48px; line-height:1.4; }
+    .sc-player .sc-cta-pill  { font-size:38px; padding:18px 48px; border-radius:20px; margin-top:0; }
+    .sc-player .sc-foot      { padding:24px 52px 44px; }
+    .sc-player .sc-logo-wm   { font-size:34px; letter-spacing:-.5px; }
+    .sc-player .sc-week-badge{ font-size:28px; }
+    .sc-player .owl-mascot   { width:44%; }
+
+    /* ── PLAYER MOBILE — story ocupa largura total, setas abaixo ── */
+    @media (max-width:600px) {
+      #story-player  { flex-wrap:wrap; align-content:flex-start; padding:10px 8px 20px; gap:8px 16px; }
+      .sp-center     { order:1; width:100%; }
+      #sp-prev       { order:2; }
+      #sp-next       { order:3; }
+      .sp-info       { font-size:9px; }
+      .sp-btn        { font-size:12px; padding:9px 14px; }
+    }
+
     /* ── BOLD ANIMATIONS ── */
     @keyframes stIconBounce { 0%{opacity:0;transform:scale(0) rotate(-15deg)} 60%{opacity:1;transform:scale(1.25) rotate(5deg)} 100%{opacity:1;transform:scale(1) rotate(0)} }
     @keyframes stPunchIn    { from{opacity:0;transform:scale(1.3)} to{opacity:1;transform:scale(1)} }
@@ -1374,7 +1399,7 @@
     var s = _spStory;
     document.getElementById('sp-info').textContent = s.title + ' · ' + (_spIdx+1) + ' / ' + STORIES.length;
     var inner = document.getElementById('sp-story-inner');
-    inner.innerHTML = renderStoryCanvas(s, '');
+    inner.innerHTML = renderStoryCanvas(s, 'sc-player');
     inner.className = 'sp-story-inner';
     // scale to fit wrapper
     setTimeout(function(){
@@ -1388,9 +1413,10 @@
       // start animation
       inner.className = 'sp-story-inner story-playing';
     }, 30);
-    // player dimensions — 9:16 fitting viewport
-    var maxH = window.innerHeight - 130;
-    var maxW = window.innerWidth  - 140;
+    // player dimensions — no mobile ocupa largura total, no desktop respeita setas laterais
+    var isMob = window.innerWidth <= 600;
+    var maxH  = window.innerHeight - (isMob ? 90  : 130);
+    var maxW  = window.innerWidth  - (isMob ? 20  : 140);
     var h = Math.min(maxH, maxW * 1920/1080);
     var w = h * 1080/1920;
     var wrap = document.getElementById('sp-frame-wrap');
